@@ -1,5 +1,15 @@
 [
   {
+    "ContainingType": "WebJerseyGoal.Controllers.CategoriesController",
+    "Method": "List",
+    "RelativePath": "api/Categories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebJerseyGoal.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",

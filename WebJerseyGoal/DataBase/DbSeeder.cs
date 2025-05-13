@@ -1,0 +1,57 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using WebJerseyGoal.DataBase.Entitties;
+using WebJerseyGoal.Interfaces;
+using WebJerseyGoal.Models.Seeder;
+
+namespace WebJerseyGoal.DataBase
+{
+    public static class DbSeeder
+    {
+        public static async Task SeedData(this WebApplication webApplication)
+        {
+            using var scope = webApplication.Services.CreateScope();
+            //Цей об'єкт буде верта посилання на конткетс, який зараєстрвоано в Progran.cs
+            var context = scope.ServiceProvider.GetRequiredService<AppDbJerseyGoalContext>();
+            var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+
+            context.Database.Migrate();
+
+            if (!context.Categories.Any())
+            {
+                var imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
+                var jsonFile = Path.Combine(Directory.GetCurrentDirectory(), "JsonData", "Categories.json");
+                if (File.Exists(jsonFile))
+                {
+                    var jsonData = await File.ReadAllTextAsync(jsonFile);
+                    try
+                    {
+                        var categories =  JsonSerializer.Deserialize<List<SeederCategoryModel>>(jsonData);
+                        var categoryEntities = mapper.Map<List<CategoryEntity>>(categories);
+                        foreach (var entity in categoryEntities)
+                        {
+                            entity.Image =
+                            await imageService.SaveImageFromUrlAsync(entity.Image);
+                        }
+
+                        await context.AddRangeAsync(categoryEntities);
+                        await context.SaveChangesAsync();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error Json Parse Data {0}", ex.Message);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Not Found File Categories.json");
+                }
+            }
+        }
+
+
+    }
+}
