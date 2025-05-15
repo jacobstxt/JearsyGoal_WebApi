@@ -11,7 +11,8 @@ namespace WebJerseyGoal.Mapper
         {
             CreateMap<SeederCategoryModel, CategoryEntity>();
             CreateMap<CategoryEntity, CategoryItemViewModel>();
-           //.ForMember(x => x.Image, opt => opt.Ignore());
+            CreateMap<CategoryCreateViewModel,CategoryEntity>()
+                .ForMember(x=> x.Image,opt=> opt.Ignore());
         } 
 
 
