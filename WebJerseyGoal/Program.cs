@@ -16,9 +16,14 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IImageService, ImageService>();
 
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // Configure the HTTP request pipeline.
 

@@ -140,3 +140,8 @@ C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\WebJerseyGoal.csp
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\WebJerseyGoal.sourcelink.json
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\WebJerse.EEF01A2C.Up2Date
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\JsonData\Categories.json
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Microsoft.OpenApi.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\WebJerseyGoal.MvcApplicationPartsAssemblyInfo.cs
