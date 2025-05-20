@@ -1,7 +1,10 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using WebJerseyGoal.DataBase;
 using WebJerseyGoal.Interfaces;
+using WebJerseyGoal.Models.Category;
+using WebJerseyGoal.Models.Validators.Category;
 using WebJerseyGoal.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +16,10 @@ opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
+//builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+//builder.Services.AddValidatorsFromAssemblyContaining<CategoryCreateValidator>();
 
 builder.Services.AddScoped<IImageService, ImageService>();
 
