@@ -23,17 +23,33 @@ namespace WebJerseyGoal.Controllers
             return Ok(model);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetItemById(int id)
+        {
+            var model = await mapper
+                .ProjectTo<CategoryItemViewModel>(jerseyContext.Categories.Where(x => x.Id == id))
+                .SingleOrDefaultAsync();
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return Ok(model);
+        }
+
+
+
+
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(CategoryCreateViewModel model)
+        public async Task<IActionResult> Create([FromForm]CategoryCreateViewModel model)
         {
             //if (!ModelState.IsValid)
             //{
             //    return BadRequest(ModelState);
             //}
-
-            var exist = await jerseyContext.Categories.SingleOrDefaultAsync(x => x.Name == model.Name);
+            var exist = await jerseyContext.Categories.Where(x => x.Name == model.Name).SingleOrDefaultAsync();
+           
 
             if (exist != null)
             {
@@ -42,7 +58,7 @@ namespace WebJerseyGoal.Controllers
 
 
             var entity = mapper.Map<CategoryEntity>(model);
-            entity.Image = await imageService.SaveImageAsync(model.Image);
+            entity.Image = await imageService.SaveImageAsync(model.Image!);
 
             await jerseyContext.Categories.AddAsync(entity);
             await jerseyContext.SaveChangesAsync();
@@ -54,6 +70,27 @@ namespace WebJerseyGoal.Controllers
         }
 
 
+
+        [HttpPut] //Якщо є метод Put - це значить змінна даних
+        public async Task<IActionResult> Edit([FromForm] CategoryEditViewModel model)
+        {
+            var existing = await jerseyContext.Categories.FirstOrDefaultAsync(x => x.Id == model.Id);
+            if (existing == null)
+            {
+                return NotFound();
+            }
+
+            existing = mapper.Map(model, existing);
+
+            if (model.Image != null)
+            {
+                await imageService.DeleteImageAsync(existing.Image);
+                existing.Image = await imageService.SaveImageAsync(model.Image);
+            }
+            await jerseyContext.SaveChangesAsync();
+
+            return Ok();
+        }
 
 
     }

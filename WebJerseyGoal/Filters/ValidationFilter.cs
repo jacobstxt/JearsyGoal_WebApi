@@ -6,45 +6,56 @@ namespace WebJerseyGoal.Filters
 {
     public class ValidationFilter: IAsyncActionFilter
     {
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        {
-            foreach (var argument in context.ActionArguments.Values)
+            public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
             {
-                if (argument == null) continue;
-
-                var validatorType = typeof(IValidator<>).MakeGenericType(argument.GetType());
-                var validator = context.HttpContext.RequestServices.GetService(validatorType);
-
-                if (validator is not null)
+                foreach (var argument in context.ActionArguments.Values)
                 {
-                    var validateMethod = validatorType.GetMethod("ValidateAsync", new[] { argument.GetType(), typeof(CancellationToken) });
-                    if (validateMethod != null)
+                    if (argument == null) continue;
+
+                    var validatorType = typeof(IValidator<>).MakeGenericType(argument.GetType());
+                    var validator = context.HttpContext.RequestServices.GetService(validatorType);
+
+                    if (validator is not null)
                     {
-                        var task = (Task)validateMethod.Invoke(validator, new object[] { argument, CancellationToken.None })!;
-                        await task.ConfigureAwait(false);
-
-                        var resultProperty = task.GetType().GetProperty("Result");
-                        var validationResult = resultProperty?.GetValue(task);
-
-                        var isValidProp = validationResult?.GetType().GetProperty("IsValid")?.GetValue(validationResult);
-                        if (isValidProp is false)
+                        var validateMethod = validatorType.GetMethod("ValidateAsync", new[] { argument.GetType(), typeof(CancellationToken) });
+                        if (validateMethod != null)
                         {
-                            var errors = (IEnumerable<FluentValidation.Results.ValidationFailure>)
-                                validationResult?.GetType().GetProperty("Errors")?.GetValue(validationResult)!;
+                            var task = (Task)validateMethod.Invoke(validator, new object[] { argument, CancellationToken.None })!;
+                            await task.ConfigureAwait(false);
 
-                            context.Result = new BadRequestObjectResult(errors.Select(e => new
+                            var resultProperty = task.GetType().GetProperty("Result");
+                            var validationResult = resultProperty?.GetValue(task);
+
+                            var isValidProp = validationResult?.GetType().GetProperty("IsValid")?.GetValue(validationResult);
+                            if (isValidProp is false)
                             {
-                                field = e.PropertyName,
-                                error = e.ErrorMessage
-                            }));
+                                var errors = (IEnumerable<FluentValidation.Results.ValidationFailure>)
+                                    validationResult?.GetType().GetProperty("Errors")?.GetValue(validationResult)!;
 
-                            return;
+                                var errorDict = errors
+                                    .GroupBy(e => e.PropertyName)
+                                    .ToDictionary(
+                                        g => g.Key,
+                                        g => g.Select(e => e.ErrorMessage).ToArray()
+                                    );
+
+                                context.Result = new BadRequestObjectResult(new
+                                {
+                                    //type = "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+                                    //title = "One or more validation errors occurred.",
+                                    status = 400,
+                                    isValid = false,
+                                    errors = errorDict,
+                                    //traceId = context.HttpContext.TraceIdentifier
+                                });
+
+                                return;
+                            }
                         }
                     }
                 }
-            }
 
-            await next();
+                await next();
 
         }
     }

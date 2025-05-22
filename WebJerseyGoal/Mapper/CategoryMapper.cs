@@ -12,7 +12,14 @@ namespace WebJerseyGoal.Mapper
             CreateMap<SeederCategoryModel, CategoryEntity>();
             CreateMap<CategoryEntity, CategoryItemViewModel>();
             CreateMap<CategoryCreateViewModel,CategoryEntity>()
+                .ForMember(x=>x.Name,opt=> opt.MapFrom(x=> x.Name.Trim()))
+                .ForMember(x => x.Slug, opt => opt.MapFrom(x => x.Slug.Trim()))
                 .ForMember(x=> x.Image,opt=> opt.Ignore());
+
+            CreateMap<CategoryEditViewModel, CategoryEntity>()
+            .ForMember(x => x.Name, opt => opt.MapFrom(x => x.Name.Trim()))
+            .ForMember(x => x.Slug, opt => opt.MapFrom(x => x.Slug.Trim()))
+            .ForMember(x => x.Image, opt => opt.Ignore());
         } 
 
 

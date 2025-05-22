@@ -1,15 +1,28 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using WebJerseyGoal.DataBase;
 using WebJerseyGoal.Models.Category;
 
 namespace WebJerseyGoal.Models.Validators.Category
 {
     public class CategoryCreateValidator: AbstractValidator<CategoryCreateViewModel>
     {
-        public CategoryCreateValidator() {
+        public CategoryCreateValidator(AppDbJerseyGoalContext db) {
 
             RuleFor(x => x.Name)
-                  .NotEmpty()
+                 .NotEmpty()
                  .WithMessage("Назва є обов'язковою")
+                 .Must(name=> !string.IsNullOrEmpty(name))
+                 .WithMessage("Назва не може бути порожньою або null")
+
+                .DependentRules(() =>
+                {
+                    RuleFor(x => x.Name)
+                    .MustAsync(async (name, cancellation) =>
+                    !await db.Categories.AnyAsync(c => c.Name.ToLower() == name.ToLower().Trim(), cancellation))
+                    .WithMessage("Категорія з такою назвою вже існує");
+                 })
+
                  .MaximumLength(250)
                  .WithMessage("Назва повинна містити не більше 250 символів");
             RuleFor(x => x.Slug)
