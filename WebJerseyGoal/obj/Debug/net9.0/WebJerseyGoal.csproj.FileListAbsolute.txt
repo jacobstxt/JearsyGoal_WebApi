@@ -145,3 +145,5 @@ C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Swashbuckle.AspNe
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\WebJerseyGoal.MvcApplicationPartsAssemblyInfo.cs
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\FluentValidation.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\FluentValidation.DependencyInjectionExtensions.dll

@@ -1,7 +1,9 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using WebJerseyGoal.DataBase;
+using WebJerseyGoal.Filters;
 using WebJerseyGoal.Interfaces;
 using WebJerseyGoal.Models.Category;
 using WebJerseyGoal.Models.Validators.Category;
@@ -18,8 +20,21 @@ opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
-//builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-//builder.Services.AddValidatorsFromAssemblyContaining<CategoryCreateValidator>();
+//Вимикаємо автоматичну валідацію через Model State
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
+//Додаємо валідацію через FluentValidation
+//Шукаємо всі можливі валідатори
+builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddMvc(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+});
+
 
 builder.Services.AddScoped<IImageService, ImageService>();
 

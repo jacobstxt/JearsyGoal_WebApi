@@ -28,17 +28,16 @@ namespace WebJerseyGoal.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CategoryCreateViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             var exist = await jerseyContext.Categories.SingleOrDefaultAsync(x => x.Name == model.Name);
 
             if (exist != null)
             {
-                ModelState.AddModelError("Name", "Така категорія уже є!!!");
-                return Conflict(ModelState);
+                return BadRequest($"{model.Name} already exists");
             }
 
 
@@ -48,9 +47,10 @@ namespace WebJerseyGoal.Controllers
             await jerseyContext.Categories.AddAsync(entity);
             await jerseyContext.SaveChangesAsync();
 
-            var result = mapper.Map<CategoryItemViewModel>(entity); 
+            //var result = mapper.Map<CategoryItemViewModel>(entity); 
 
-            return CreatedAtAction(nameof(List), new { id = entity.Id }, result);
+            //return CreatedAtAction(nameof(List), new { id = entity.Id }, result);
+            return Ok(entity);
         }
 
 

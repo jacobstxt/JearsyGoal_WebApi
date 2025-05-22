@@ -9140,6 +9140,7 @@
   "projectFileDependencyGroups": {
     "net9.0": [
       "AutoMapper >= 14.0.0",
+      "FluentValidation >= 12.0.0",
       "FluentValidation.DependencyInjectionExtensions >= 12.0.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 9.0.4",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.4",
@@ -9205,6 +9206,10 @@
           "AutoMapper": {
             "target": "Package",
             "version": "[14.0.0, )"
+          },
+          "FluentValidation": {
+            "target": "Package",
+            "version": "[12.0.0, )"
           },
           "FluentValidation.DependencyInjectionExtensions": {
             "target": "Package",
