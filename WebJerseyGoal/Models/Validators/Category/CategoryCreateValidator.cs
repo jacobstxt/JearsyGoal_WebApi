@@ -31,8 +31,10 @@ namespace WebJerseyGoal.Models.Validators.Category
                 .MaximumLength(250)
                 .WithMessage("Слаг повинен містити не більше 250 символів");
             RuleFor(x => x.Image)
-                .NotEmpty().
-                WithMessage("Файл зображення є обов'язковим");
+                 .NotNull()
+                 .WithMessage("Файл зображення є обов'язковим")
+                 .Must(file => file != null && file.Length > 0)
+                 .WithMessage("Файл зображення не може бути порожнім");
         }
 
 

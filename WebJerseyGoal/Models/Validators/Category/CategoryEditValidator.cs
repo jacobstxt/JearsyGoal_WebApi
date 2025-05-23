@@ -24,7 +24,6 @@ namespace WebJerseyGoal.Models.Validators.Category
                 })
             
 
-
                 .MaximumLength(250)
                 .WithMessage("Назва повинна містити не більше 250 символів");
             RuleFor(x => x.Slug)

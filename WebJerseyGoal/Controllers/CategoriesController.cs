@@ -38,9 +38,6 @@ namespace WebJerseyGoal.Controllers
 
 
 
-
-
-
         [HttpPost]
         public async Task<IActionResult> Create([FromForm]CategoryCreateViewModel model)
         {
