@@ -90,5 +90,25 @@ namespace WebJerseyGoal.Controllers
         }
 
 
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var category = await jerseyContext.Categories.SingleOrDefaultAsync(c => c.Id == id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            if (!string.IsNullOrEmpty(category.Image))
+            {
+                await imageService.DeleteImageAsync(category.Image);
+            }
+
+            jerseyContext.Categories.Remove(category);
+            await jerseyContext.SaveChangesAsync();
+
+            return Ok();
+        }
+
+
     }
 }
