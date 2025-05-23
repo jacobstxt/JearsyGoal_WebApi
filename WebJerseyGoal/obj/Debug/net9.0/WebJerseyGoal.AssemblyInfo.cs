@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebJerseyGoal")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8558d608380c41ac94a580a7d7b28a33ce637af0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c3cf7d8cf2cc13c39f5e22dd07699c853014b78")]
 [assembly: System.Reflection.AssemblyProductAttribute("WebJerseyGoal")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebJerseyGoal")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
