@@ -150,3 +150,5 @@ C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Microsoft.Identit
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\JsonData\Users.json
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\WebJerseyGoal.xml
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\WebJerseyGoal.xml

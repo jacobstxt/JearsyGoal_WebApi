@@ -1,7 +1,9 @@
-﻿namespace WebJerseyGoal.Interfaces
+﻿using WebJerseyGoal.DataBase.Entitties.Identity;
+
+namespace WebJerseyGoal.Interfaces
 {
     public interface IJwtTokenService
     {
-        Task<string> CreateTokenAsync();
+        Task<string> CreateTokenAsync(UserEntity user);
     }
 }

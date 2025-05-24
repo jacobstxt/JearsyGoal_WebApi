@@ -32,10 +32,6 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 //Шукаємо всі можливі валідатори
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddMvc(options =>
-{
-    options.Filters.Add<ValidationFilter>();
-});
 
 
 builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
@@ -51,8 +47,23 @@ builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
 
 
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddMvc(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+});
+
+
+var assemblyName = typeof(Program).Assembly.GetName().Name;
+
+builder.Services.AddSwaggerGen(opt =>
+{
+    var fileDoc = $"{assemblyName}.xml";
+    var filePath = Path.Combine(AppContext.BaseDirectory, fileDoc);
+    opt.IncludeXmlComments(filePath);
+});
+
 
 builder.Services.AddControllers();
 

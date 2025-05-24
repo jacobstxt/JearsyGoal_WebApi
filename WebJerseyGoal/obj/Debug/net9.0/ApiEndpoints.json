@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "WebJerseyGoal.Controllers.AccountController",
+    "Method": "Login",
+    "RelativePath": "api/Account/Login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "WebJerseyGoal.Models.Account.LoginModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebJerseyGoal.Controllers.CategoriesController",
     "Method": "List",
     "RelativePath": "api/Categories",
