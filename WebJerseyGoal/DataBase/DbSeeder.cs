@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using WebJerseyGoal.Constants;
 using WebJerseyGoal.DataBase.Entitties;
+using WebJerseyGoal.DataBase.Entitties.Identity;
 using WebJerseyGoal.Interfaces;
 using WebJerseyGoal.Models.Seeder;
 
@@ -15,6 +17,8 @@ namespace WebJerseyGoal.DataBase
             using var scope = webApplication.Services.CreateScope();
             //Цей об'єкт буде верта посилання на конткетс, який зараєстрвоано в Progran.cs
             var context = scope.ServiceProvider.GetRequiredService<AppDbJerseyGoalContext>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<RoleEntity>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserEntity>>();
             var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
             context.Database.Migrate();
@@ -50,6 +54,21 @@ namespace WebJerseyGoal.DataBase
                     Console.WriteLine("Not Found File Categories.json");
                 }
             }
+
+            if (!context.Roles.Any())
+            {
+                foreach (var roleName in Roles.AllRoles)
+                {
+                    var result = await roleManager.CreateAsync(new(roleName));
+                    if (!result.Succeeded)
+                    {
+                        Console.WriteLine("Error Create Role{0}", roleName);
+                    }
+                }
+            }
+
+
+
         }
 
 

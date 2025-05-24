@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebJerseyGoal.DataBase;
@@ -11,9 +12,11 @@ using WebJerseyGoal.DataBase;
 namespace WebJerseyGoal.Migrations
 {
     [DbContext(typeof(AppDbJerseyGoalContext))]
-    partial class AppDbJerseyGoalContextModelSnapshot : ModelSnapshot
+    [Migration("20250524154959_IdentityUser")]
+    partial class IdentityUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

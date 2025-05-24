@@ -1,8 +1,10 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using WebJerseyGoal.DataBase;
+using WebJerseyGoal.DataBase.Entitties.Identity;
 using WebJerseyGoal.Filters;
 using WebJerseyGoal.Interfaces;
 using WebJerseyGoal.Models.Category;
@@ -34,6 +36,18 @@ builder.Services.AddMvc(options =>
 {
     options.Filters.Add<ValidationFilter>();
 });
+
+
+builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+})
+    .AddEntityFrameworkStores<AppDbJerseyGoalContext>()
+    .AddDefaultTokenProviders();
 
 
 builder.Services.AddScoped<IImageService, ImageService>();

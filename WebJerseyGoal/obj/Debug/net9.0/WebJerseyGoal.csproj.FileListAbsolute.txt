@@ -15,12 +15,6 @@ C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\scopedcss\bundle\
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\staticwebassets.build.json
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\staticwebassets.development.json
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\staticwebassets\msbuild.WebJerseyGoal.Microsoft.AspNetCore.StaticWebAssets.props
-C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\staticwebassets\msbuild.WebJerseyGoal.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\staticwebassets\msbuild.build.WebJerseyGoal.props
-C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.WebJerseyGoal.props
-C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.WebJerseyGoal.props
-C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\staticwebassets.pack.json
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\WebJerseyGoal.dll
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\refint\WebJerseyGoal.dll
@@ -70,7 +64,6 @@ C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\System.Compositio
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\System.Composition.Hosting.dll
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\System.Composition.Runtime.dll
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\System.Composition.TypedParts.dll
-C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\System.Text.Json.dll
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.resources.dll
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.resources.dll
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\es\Microsoft.CodeAnalysis.resources.dll
@@ -147,3 +140,12 @@ C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Swashbuckle.AspNe
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\WebJerseyGoal.MvcApplicationPartsAssemblyInfo.cs
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\FluentValidation.dll
 C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+C:\IT\Web\ASP.NET\WebJerseyGoal\WebJerseyGoal\obj\Debug\net9.0\staticwebassets.build.json.cache
