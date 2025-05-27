@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebJerseyGoal.Constants;
 using WebJerseyGoal.DataBase;
 using WebJerseyGoal.DataBase.Entitties;
 using WebJerseyGoal.Interfaces;
@@ -16,6 +18,7 @@ namespace WebJerseyGoal.Controllers
     public class CategoriesController(AppDbJerseyGoalContext jerseyContext,IMapper mapper,IImageService imageService) : ControllerBase
     {
         [HttpGet]
+        [Authorize(Roles = $"{Roles.Admin}")]
         public async Task<IActionResult> List()
         {
             var model = await mapper.ProjectTo<CategoryItemViewModel>(jerseyContext.Categories).ToListAsync();

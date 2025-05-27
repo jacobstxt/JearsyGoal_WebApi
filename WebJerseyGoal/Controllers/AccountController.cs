@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebJerseyGoal.Constants;
 using WebJerseyGoal.DataBase.Entitties.Identity;
 using WebJerseyGoal.Interfaces;
 using WebJerseyGoal.Models.Account;
@@ -13,6 +15,7 @@ namespace WebJerseyGoal.Controllers
     public class AccountController(IJwtTokenService jwtTokenService,
         UserManager<UserEntity> userManager) : ControllerBase
     {
+
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {

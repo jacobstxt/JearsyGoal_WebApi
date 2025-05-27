@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using WebJerseyGoal.DataBase;
 using WebJerseyGoal.Models.Category;
 
-namespace WebJerseyGoal.Models.Validators.Category
+namespace WebJerseyGoal.Validators.Category
 {
     public class CategoryCreateValidator: AbstractValidator<CategoryCreateViewModel>
     {
