@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebJerseyGoal.Constants;
-using WebJerseyGoal.DataBase.Entitties.Identity;
-using WebJerseyGoal.Interfaces;
-using WebJerseyGoal.Models.Account;
-using WebJerseyGoal.Services;
+using Domain.Entitties.Identity;
+using Core.Interfaces;
+using Core.Models.Account;
+using Core.Services;
 
 namespace WebJerseyGoal.Controllers
 {
@@ -39,12 +39,27 @@ namespace WebJerseyGoal.Controllers
             user.Image = await imageService.SaveImageAsync(model.Avatar) ?? null;
 
             var result = await userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
+            if (result.Succeeded)
             {
-                return BadRequest(result.Errors);
+                await userManager.AddToRoleAsync(user, Roles.User);
+                var token = await jwtTokenService.CreateTokenAsync(user);
+                return Ok(new
+                {
+                    Token = token
+                });
             }
-            return Ok();
+            else
+            {
+                return BadRequest(new
+                {
+                    status = 400,
+                    isValid = false,
+                    errors = "Registration failed"
+                });
+            }
         }
+
+
 
 
     }

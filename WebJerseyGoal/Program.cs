@@ -7,12 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using WebJerseyGoal.DataBase;
-using WebJerseyGoal.DataBase.Entitties.Identity;
+using WebJerseyGoal;
+using Domain;
+using Domain.Entitties.Identity;
 using WebJerseyGoal.Filters;
-using WebJerseyGoal.Interfaces;
-using WebJerseyGoal.Models.Category;
-using WebJerseyGoal.Services;
+using Core.Interfaces;
+using Core.Models.Category;
+using Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
