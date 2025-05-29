@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using MailKit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +15,7 @@ namespace WebJerseyGoal.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class AccountController(IJwtTokenService jwtTokenService,
-        UserManager<UserEntity> userManager) : ControllerBase
+        UserManager<UserEntity> userManager,IMapper mapper,IImageService imageService) : ControllerBase
     {
 
         [HttpPost]
@@ -30,23 +32,20 @@ namespace WebJerseyGoal.Controllers
 
 
 
-        //[HttpPost("register")]
-        //public async Task<IActionResult> Register([FromBody] RegisterModel model)
-        //{
-        //    var user = new UserEntity
-        //    {
-        //        UserName = model.Username,
-        //        Email = model.Email,
-        //        FirstName = model.FirstName,
-        //        LastName = model.LastName
-        //    };
-        //    var result = await userManager.CreateAsync(user, model.Password);
-        //    if (!result.Succeeded)
-        //    {
-        //        return BadRequest(result.Errors);
-        //    }
-        //    return Ok();
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Register([FromForm] RegisterModel model)
+        {
+            var user = mapper.Map<UserEntity>(model);
+            user.Image = await imageService.SaveImageAsync(model.Avatar) ?? null;
+
+            var result = await userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+            return Ok();
+        }
+
 
     }
 }
