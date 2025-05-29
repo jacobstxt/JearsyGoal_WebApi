@@ -15,13 +15,13 @@ namespace WebJerseyGoal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController(AppDbJerseyGoalContext jerseyContext,IMapper mapper,IImageService imageService) : ControllerBase
+    public class CategoriesController(ICategoryService categoryService) : ControllerBase
     {
         [HttpGet]
         //[Authorize(Roles = $"{Roles.Admin}")]
         public async Task<IActionResult> List()
         {
-            var model = await mapper.ProjectTo<CategoryItemViewModel>(jerseyContext.Categories).ToListAsync();
+            var model = await categoryService.List();
 
             return Ok(model);
         }
@@ -29,9 +29,7 @@ namespace WebJerseyGoal.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetItemById(int id)
         {
-            var model = await mapper
-                .ProjectTo<CategoryItemViewModel>(jerseyContext.Categories.Where(x => x.Id == id))
-                .SingleOrDefaultAsync();
+            var model = await categoryService.GetItemById(id);
             if (model == null)
             {
                 return NotFound();
@@ -44,29 +42,8 @@ namespace WebJerseyGoal.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromForm]CategoryCreateViewModel model)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-            var exist = await jerseyContext.Categories.Where(x => x.Name == model.Name).SingleOrDefaultAsync();
-           
-
-            if (exist != null)
-            {
-                return BadRequest($"{model.Name} already exists");
-            }
-
-
-            var entity = mapper.Map<CategoryEntity>(model);
-            entity.Image = await imageService.SaveImageAsync(model.Image!);
-
-            await jerseyContext.Categories.AddAsync(entity);
-            await jerseyContext.SaveChangesAsync();
-
-            //var result = mapper.Map<CategoryItemViewModel>(entity); 
-
-            //return CreatedAtAction(nameof(List), new { id = entity.Id }, result);
-            return Ok(entity);
+            var  category = await categoryService.Create(model);
+            return Ok(category);
         }
 
 
@@ -74,41 +51,15 @@ namespace WebJerseyGoal.Controllers
         [HttpPut] //Якщо є метод Put - це значить змінна даних
         public async Task<IActionResult> Edit([FromForm] CategoryEditViewModel model)
         {
-            var existing = await jerseyContext.Categories.FirstOrDefaultAsync(x => x.Id == model.Id);
-            if (existing == null)
-            {
-                return NotFound();
-            }
-
-            existing = mapper.Map(model, existing);
-
-            if (model.Image != null)
-            {
-                await imageService.DeleteImageAsync(existing.Image);
-                existing.Image = await imageService.SaveImageAsync(model.Image);
-            }
-            await jerseyContext.SaveChangesAsync();
-
-            return Ok();
+           var category = await categoryService.Edit(model);
+           return Ok();
         }
 
 
         [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var category = await jerseyContext.Categories.SingleOrDefaultAsync(c => c.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-            if (!string.IsNullOrEmpty(category.Image))
-            {
-                await imageService.DeleteImageAsync(category.Image);
-            }
-
-            jerseyContext.Categories.Remove(category);
-            await jerseyContext.SaveChangesAsync();
-
+            var category = await categoryService.Delete(id);
             return Ok();
         }
 

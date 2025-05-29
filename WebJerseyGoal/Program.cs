@@ -14,6 +14,7 @@ using WebJerseyGoal.Filters;
 using Core.Interfaces;
 using Core.Models.Category;
 using Core.Services;
+using Core.Models.Account;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +63,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 
 builder.Services.AddControllers();
@@ -88,7 +90,7 @@ builder.Services.AddMvc(options =>
 });
 
 
-var assemblyName = typeof(Program).Assembly.GetName().Name;
+var assemblyName = typeof(LoginModel).Assembly.GetName().Name;
 
 
 builder.Services.AddSwaggerGen(opt =>
