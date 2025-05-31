@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entitties.Identity;
 
 namespace Domain.Entitties
 {
@@ -16,5 +17,7 @@ namespace Domain.Entitties
 
         [StringLength(200)]
         public string Image { get; set; } = String.Empty;
+        public ICollection<ProductIngridientEntity>? ProductIngridients { get; set; }
+
     }
 }

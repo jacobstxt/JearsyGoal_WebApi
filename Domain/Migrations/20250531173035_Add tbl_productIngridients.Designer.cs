@@ -3,6 +3,7 @@ using System;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Domain.Migrations
 {
     [DbContext(typeof(AppDbJerseyGoalContext))]
-    partial class AppDbJerseyGoalContextModelSnapshot : ModelSnapshot
+    [Migration("20250531173035_Add tbl_productIngridients")]
+    partial class Addtbl_productIngridients
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,37 +253,6 @@ namespace Domain.Migrations
                     b.ToTable("tbl_products");
                 });
 
-            modelBuilder.Entity("Domain.Entitties.ProductImageEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<short>("Priority")
-                        .HasColumnType("smallint");
-
-                    b.Property<long>("ProductId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("tbl_productImages");
-                });
-
             modelBuilder.Entity("Domain.Entitties.ProductSizeEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -460,17 +432,6 @@ namespace Domain.Migrations
                     b.Navigation("ProductSize");
                 });
 
-            modelBuilder.Entity("Domain.Entitties.ProductImageEntity", b =>
-                {
-                    b.HasOne("Domain.Entitties.ProductEntity", "Product")
-                        .WithMany("ProductImages")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
                     b.HasOne("Domain.Entitties.Identity.RoleEntity", null)
@@ -548,8 +509,6 @@ namespace Domain.Migrations
 
             modelBuilder.Entity("Domain.Entitties.ProductEntity", b =>
                 {
-                    b.Navigation("ProductImages");
-
                     b.Navigation("ProductIngridients");
                 });
 
