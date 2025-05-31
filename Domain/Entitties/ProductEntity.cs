@@ -5,15 +5,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entitties
 {
-    //[Table("tbl_products")]
-    //public class ProductEntity:BaseEntity<long>
-    //{
-    //    [StringLength(250)]
-    //    public string Name { get; set; }
-    //    public decimal Price { get; set; }
-    //    [ForeignKey("Category")]
-    //    public long CategoryId { get; set; }
+    [Table("tbl_products")]
+    public class ProductEntity : BaseEntity<long>
+    {
+        [StringLength(250)]
+        public string Name { get; set; } = String.Empty;
+        public decimal Price { get; set; }
+        public int Weight { get; set; } // Вага продукту в грамах
+        [StringLength(250)]
+        public string Slug { get; set; } = String.Empty;
 
-    //    public CategoryEntity? Category { get; set; }
-    //}
+        [ForeignKey("Category")]
+        public long CategoryId { get; set; }
+
+        public CategoryEntity? Category { get; set; }
+        // Може бути null, якщо продукт не має розміру
+        [ForeignKey("ProductSize")]
+        public long? ProductSizeId { get; set; }
+
+        public ProductSizeEntity? ProductSize { get; set; }
+    }
 }
