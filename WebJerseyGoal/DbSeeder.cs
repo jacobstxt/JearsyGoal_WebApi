@@ -115,6 +115,39 @@ namespace WebJerseyGoal
                 }
             }
 
+            if (!context.Ingredients.Any())
+            {
+                var imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
+                var jsonFile = Path.Combine(Directory.GetCurrentDirectory(), "JsonData", "Ingridients.json");
+                if (File.Exists(jsonFile))
+                {
+                    var jsonData = await File.ReadAllTextAsync(jsonFile);
+                    try
+                    {
+                        var ingridients = JsonSerializer.Deserialize<List<SeederIngridientModel>>(jsonData);
+                        var ingridientEntities = mapper.Map<List<IngredientEntity>>(ingridients);
+                        foreach (var entity in ingridientEntities)
+                        {
+                            entity.Image =
+                            await imageService.SaveImageFromUrlAsync(entity.Image);
+                        }
+
+                        await context.Ingredients.AddRangeAsync(ingridientEntities);
+                        await context.SaveChangesAsync();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error Json Parse Data {0}", ex.Message);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Not Found File Categories.json");
+                }
+            }
+
+
 
         }
 
