@@ -10,6 +10,7 @@ namespace Domain
         public AppDbJerseyGoalContext(DbContextOptions<AppDbJerseyGoalContext> opt) : base(opt) { }
 
         public DbSet<CategoryEntity> Categories { get; set; }
+        public DbSet<IngredientEntity> Ingredients { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder builder)
