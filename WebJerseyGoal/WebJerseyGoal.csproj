@@ -38,6 +38,9 @@
 
 
 	<ItemGroup>
+	  <Content Update="JsonData\ProductSizes.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	  <Content Update="JsonData\Ingridients.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>

@@ -148,6 +148,30 @@ namespace WebJerseyGoal
             }
 
 
+            if (!context.ProductSizes.Any())
+            {
+                var jsonFile = Path.Combine(Directory.GetCurrentDirectory(), "JsonData", "ProductSizes.json");
+                if (File.Exists(jsonFile))
+                {
+                    var jsonData = await File.ReadAllTextAsync(jsonFile);
+                    try
+                    {
+                        var items = JsonSerializer.Deserialize<List<SeederProductSizeModel>>(jsonData);
+                        var productSizeEntities = mapper.Map<List<ProductSizeEntity>>(items);
+                        await context.ProductSizes.AddRangeAsync(productSizeEntities);
+                        await context.SaveChangesAsync();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error Json Parse Data {0}", ex.Message);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Not Found File Categories.json");
+                }
+            }
 
         }
 
