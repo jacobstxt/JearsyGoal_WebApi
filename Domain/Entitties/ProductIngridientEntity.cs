@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entitties.Identity
 {
@@ -11,7 +9,7 @@ namespace Domain.Entitties.Identity
             public long ProductId { get; set; }
             [ForeignKey("Ingredient")]
             public long IngredientId { get; set; }
-            public virtual ProductEntity? Product { get; set; } = new();
-            public virtual IngredientEntity? Ingredient { get; set; } = new();
+            public virtual ProductEntity? Product { get; set; }
+            public virtual IngredientEntity? Ingredient { get; set; }
         }
 }
