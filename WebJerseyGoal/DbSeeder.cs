@@ -128,7 +128,7 @@ namespace WebJerseyGoal
                 context.Products.Add(caesar);
                 await context.SaveChangesAsync();
 
-                //var ingredients = context.Ingredients.ToList();
+                var ingredients = context.Ingredients.ToList();
 
                 foreach (var ingredient in ingredients)
                 {
