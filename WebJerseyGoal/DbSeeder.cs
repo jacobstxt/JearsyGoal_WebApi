@@ -56,6 +56,123 @@ namespace WebJerseyGoal
                 }
             }
 
+            if (!context.Ingredients.Any())
+            {
+                var imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
+                var jsonFile = Path.Combine(Directory.GetCurrentDirectory(), "JsonData", "Ingridients.json");
+                if (File.Exists(jsonFile))
+                {
+                    var jsonData = await File.ReadAllTextAsync(jsonFile);
+                    try
+                    {
+                        var ingridients = JsonSerializer.Deserialize<List<SeederIngridientModel>>(jsonData);
+                        var ingridientEntities = mapper.Map<List<IngredientEntity>>(ingridients);
+                        foreach (var entity in ingridientEntities)
+                        {
+                            entity.Image =
+                            await imageService.SaveImageFromUrlAsync(entity.Image);
+                        }
+
+                        await context.Ingredients.AddRangeAsync(ingridientEntities);
+                        await context.SaveChangesAsync();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error Json Parse Data {0}", ex.Message);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Not Found File Categories.json");
+                }
+            }
+
+            if (!context.ProductSizes.Any())
+            {
+                var jsonFile = Path.Combine(Directory.GetCurrentDirectory(), "JsonData", "ProductSizes.json");
+                if (File.Exists(jsonFile))
+                {
+                    var jsonData = await File.ReadAllTextAsync(jsonFile);
+                    try
+                    {
+                        var items = JsonSerializer.Deserialize<List<SeederProductSizeModel>>(jsonData);
+                        var productSizeEntities = mapper.Map<List<ProductSizeEntity>>(items);
+                        await context.ProductSizes.AddRangeAsync(productSizeEntities);
+                        await context.SaveChangesAsync();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error Json Parse Data {0}", ex.Message);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Not Found File Categories.json");
+                }
+            }
+
+            if (!context.Products.Any())
+            {
+                var caesar = new ProductEntity
+                {
+                    Name = "Цезаре",
+                    Slug = "caesar",
+                    Price = 195,
+                    Weight = 540,
+                    CategoryId = 1, // Assuming the first category is for Caesar
+                    ProductSizeId = 1 // Assuming the first size is for Caesar
+                };
+
+                context.Products.Add(caesar);
+                await context.SaveChangesAsync();
+
+                var ingredients = context.Ingredients.ToList();
+
+                //foreach (var ingredient in ingredients)
+                //{
+                //    var productIngredient = new ProductIngridientEntity
+                //    {
+                //        ProductId = caesar.Id,
+                //        IngredientId = ingredient.Id
+                //    };
+                //    context.ProductIngridients.Add(productIngredient);
+                //}
+                var item = new ProductIngridientEntity
+                {
+                    ProductId = 1,
+                    IngredientId = 1 // Assuming the first ingredient is for Caesar
+                };
+                context.ProductIngridients.Add(item);
+                await context.SaveChangesAsync();
+
+                string[] images = {
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRN9gItVjEVGS7l2_WkYpNfWJa5y_XQcZ0hQ&s",
+                "https://cdn.lifehacker.ru/wp-content/uploads/2022/03/11187_1522960128.7729_1646727034-1170x585.jpg"
+                };
+
+                var imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
+                foreach (var imageUrl in images)
+                {
+                    try
+                    {
+                        var productImage = new ProductImageEntity
+                        {
+                            ProductId = caesar.Id,
+                            Name = await imageService.SaveImageFromUrlAsync(imageUrl)
+                        };
+                        context.ProductImages.Add(productImage);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error Save Image {0} - {1}", imageUrl, ex.Message);
+                    }
+                }
+                await context.SaveChangesAsync();
+            }
+
+
             if (!context.Roles.Any())
             {
                 foreach (var roleName in Roles.AllRoles)
@@ -115,63 +232,13 @@ namespace WebJerseyGoal
                 }
             }
 
-            if (!context.Ingredients.Any())
-            {
-                var imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
-                var jsonFile = Path.Combine(Directory.GetCurrentDirectory(), "JsonData", "Ingridients.json");
-                if (File.Exists(jsonFile))
-                {
-                    var jsonData = await File.ReadAllTextAsync(jsonFile);
-                    try
-                    {
-                        var ingridients = JsonSerializer.Deserialize<List<SeederIngridientModel>>(jsonData);
-                        var ingridientEntities = mapper.Map<List<IngredientEntity>>(ingridients);
-                        foreach (var entity in ingridientEntities)
-                        {
-                            entity.Image =
-                            await imageService.SaveImageFromUrlAsync(entity.Image);
-                        }
-
-                        await context.Ingredients.AddRangeAsync(ingridientEntities);
-                        await context.SaveChangesAsync();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Error Json Parse Data {0}", ex.Message);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Not Found File Categories.json");
-                }
-            }
+         
+       
 
 
-            if (!context.ProductSizes.Any())
-            {
-                var jsonFile = Path.Combine(Directory.GetCurrentDirectory(), "JsonData", "ProductSizes.json");
-                if (File.Exists(jsonFile))
-                {
-                    var jsonData = await File.ReadAllTextAsync(jsonFile);
-                    try
-                    {
-                        var items = JsonSerializer.Deserialize<List<SeederProductSizeModel>>(jsonData);
-                        var productSizeEntities = mapper.Map<List<ProductSizeEntity>>(items);
-                        await context.ProductSizes.AddRangeAsync(productSizeEntities);
-                        await context.SaveChangesAsync();
+          
 
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Error Json Parse Data {0}", ex.Message);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Not Found File Categories.json");
-                }
-            }
+
 
         }
 

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using Domain.Entitties;
 using Core.Models.Category;
+using Core.Models.Product;
 using Core.Models.Seeder;
+using Domain.Entitties;
 
 namespace Core.Mapper
 {
@@ -10,6 +11,7 @@ namespace Core.Mapper
         public IngridientMapper()
         {
             CreateMap<SeederIngridientModel, IngredientEntity>();
+            CreateMap<IngredientEntity, ProductIngridientModel>();
         } 
 
 
