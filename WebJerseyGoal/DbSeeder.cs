@@ -128,7 +128,7 @@ namespace WebJerseyGoal
                 context.Products.Add(caesar);
                 await context.SaveChangesAsync();
 
-                var ingredients = context.Ingredients.ToList();
+                //var ingredients = context.Ingredients.ToList();
 
                 foreach (var ingredient in ingredients)
                 {
@@ -141,7 +141,7 @@ namespace WebJerseyGoal
                 }
 
                 await context.SaveChangesAsync();
-
+                
                 string[] images = {
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRN9gItVjEVGS7l2_WkYpNfWJa5y_XQcZ0hQ&s",
                 "https://cdn.lifehacker.ru/wp-content/uploads/2022/03/11187_1522960128.7729_1646727034-1170x585.jpg"
@@ -165,6 +165,7 @@ namespace WebJerseyGoal
                     }
                 }
                 await context.SaveChangesAsync();
+                
             }
 
 
