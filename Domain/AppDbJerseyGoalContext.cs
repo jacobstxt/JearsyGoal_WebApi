@@ -13,7 +13,7 @@ namespace Domain
         public DbSet<IngredientEntity> Ingredients { get; set; }
         public DbSet<ProductSizeEntity> ProductSizes { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
-        public DbSet<ProductIngridientEntity> ProductIngridients { get; set; }
+        public DbSet<ProductIngredientEntity> ProductIngredients { get; set; }
         public DbSet<ProductImageEntity> ProductImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -33,7 +33,7 @@ namespace Domain
             });
 
 
-            builder.Entity<ProductIngridientEntity>()
+            builder.Entity<ProductIngredientEntity>()
                 .HasKey(pi => new { pi.ProductId, pi.IngredientId });
 
         }

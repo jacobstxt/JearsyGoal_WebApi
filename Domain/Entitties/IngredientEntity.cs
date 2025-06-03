@@ -17,7 +17,7 @@ namespace Domain.Entitties
 
         [StringLength(200)]
         public string Image { get; set; } = String.Empty;
-        public ICollection<ProductIngridientEntity>? ProductIngridients { get; set; }
+        public ICollection<ProductIngredientEntity>? ProductIngredients { get; set; }
 
     }
 }

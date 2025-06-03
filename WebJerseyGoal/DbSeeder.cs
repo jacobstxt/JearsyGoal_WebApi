@@ -130,21 +130,16 @@ namespace WebJerseyGoal
 
                 var ingredients = context.Ingredients.ToList();
 
-                //foreach (var ingredient in ingredients)
-                //{
-                //    var productIngredient = new ProductIngridientEntity
-                //    {
-                //        ProductId = caesar.Id,
-                //        IngredientId = ingredient.Id
-                //    };
-                //    context.ProductIngridients.Add(productIngredient);
-                //}
-                var item = new ProductIngridientEntity
+                foreach (var ingredient in ingredients)
                 {
-                    ProductId = 1,
-                    IngredientId = 1 // Assuming the first ingredient is for Caesar
-                };
-                context.ProductIngridients.Add(item);
+                    var productIngredient = new ProductIngredientEntity
+                    {
+                        ProductId = caesar.Id,
+                        IngredientId = ingredient.Id
+                    };
+                    context.ProductIngredients.Add(productIngredient);
+                }
+
                 await context.SaveChangesAsync();
 
                 string[] images = {

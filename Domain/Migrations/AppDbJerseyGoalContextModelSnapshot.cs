@@ -56,7 +56,7 @@ namespace Domain.Migrations
                     b.ToTable("tbl_categories");
                 });
 
-            modelBuilder.Entity("Domain.Entitties.Identity.ProductIngridientEntity", b =>
+            modelBuilder.Entity("Domain.Entitties.Identity.ProductIngredientEntity", b =>
                 {
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
@@ -424,16 +424,16 @@ namespace Domain.Migrations
                     b.HasDiscriminator().HasValue("UserRoleEntity");
                 });
 
-            modelBuilder.Entity("Domain.Entitties.Identity.ProductIngridientEntity", b =>
+            modelBuilder.Entity("Domain.Entitties.Identity.ProductIngredientEntity", b =>
                 {
                     b.HasOne("Domain.Entitties.IngredientEntity", "Ingredient")
-                        .WithMany("ProductIngridients")
+                        .WithMany("ProductIngredients")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entitties.ProductEntity", "Product")
-                        .WithMany("ProductIngridients")
+                        .WithMany("ProductIngredients")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -543,14 +543,14 @@ namespace Domain.Migrations
 
             modelBuilder.Entity("Domain.Entitties.IngredientEntity", b =>
                 {
-                    b.Navigation("ProductIngridients");
+                    b.Navigation("ProductIngredients");
                 });
 
             modelBuilder.Entity("Domain.Entitties.ProductEntity", b =>
                 {
                     b.Navigation("ProductImages");
 
-                    b.Navigation("ProductIngridients");
+                    b.Navigation("ProductIngredients");
                 });
 
             modelBuilder.Entity("Domain.Entitties.ProductSizeEntity", b =>

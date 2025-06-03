@@ -18,7 +18,7 @@ namespace Core.Mapper
                 .ForMember(src => src.ProductImages, opt => opt
                     .MapFrom(x => x.ProductImages.OrderBy(p => p.Priority)))
                 .ForMember(src => src.Ingridients, opt => opt
-                    .MapFrom(x => x.ProductIngridients.Select(x => x.Ingredient)));
+                    .MapFrom(x => x.ProductIngredients.Select(x => x.Ingredient)));
 
 
 
