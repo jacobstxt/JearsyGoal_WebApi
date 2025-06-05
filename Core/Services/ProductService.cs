@@ -8,11 +8,13 @@ using AutoMapper.QueryableExtensions;
 using Core.Interfaces;
 using Core.Models.Product;
 using Domain;
+using Domain.Entitties;
+using Domain.Entitties.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Services
 {
-    public class ProductService(IMapper mapper, AppDbJerseyGoalContext context) : IProductService
+    public class ProductService(IMapper mapper, AppDbJerseyGoalContext context, IImageService imageService) : IProductService
     {
         public async Task<ProductItemModel> GetById(int id)
         {
@@ -42,5 +44,50 @@ namespace Core.Services
 
             return model;
         }
+
+
+        public async Task<ProductEntity> Create(ProductCreateModel model)
+        {
+            var entity = mapper.Map<ProductEntity>(model);
+            context.Products.Add(entity);
+            await context.SaveChangesAsync();
+            foreach (var ingId in model.ProductIngredientsId!)
+            {
+                var productIngredient = new ProductIngredientEntity
+                {
+                    ProductId = entity.Id,
+                    IngredientId = ingId
+                };
+                context.ProductIngredients.Add(productIngredient);
+            }
+            await context.SaveChangesAsync();
+
+
+            for (short i = 0; i < model.ImageFiles!.Count; i++)
+            {
+                try
+                {
+                    var productImage = new ProductImageEntity
+                    {
+                        ProductId = entity.Id,
+                        Name = await imageService.SaveImageAsync(model.ImageFiles[i]),
+                        Priority = i
+                    };
+                    context.ProductImages.Add(productImage);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error Json Parse Data for PRODUCT IMAGE", ex.Message);
+                }
+            }
+            await context.SaveChangesAsync();
+            return entity;
+        }
+
+
+
+
+
+
     }
 }

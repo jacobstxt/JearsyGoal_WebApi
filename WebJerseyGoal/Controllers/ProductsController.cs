@@ -1,4 +1,5 @@
 ﻿using Core.Interfaces;
+using Core.Models.Product;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebJerseyGoal.Controllers
@@ -29,5 +30,19 @@ namespace WebJerseyGoal.Controllers
                 return Ok(model);
             }
 
-        }
+
+            [HttpPost("create")]
+            public async Task<IActionResult> Create([FromForm] ProductCreateModel model)
+            {              
+                if (model.ImageFiles == null)
+                    return BadRequest("Image files are empty!");
+                if (model.ProductIngredientsId == null)
+                    return BadRequest("Product ingredients are empty!");
+                var entity = await productService.Create(model);
+                if (entity != null)
+                    return Ok(model);
+                else return BadRequest("Error create product!");
+            }
+
+    }
     }

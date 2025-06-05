@@ -15,10 +15,13 @@ namespace Core.Mapper
         {
             CreateMap<ProductImageEntity, ProductImageModel>();
             CreateMap<ProductEntity, ProductItemModel>()
-                .ForMember(src => src.ProductImages, opt => opt
-                    .MapFrom(x => x.ProductImages.OrderBy(p => p.Priority)))
-                .ForMember(src => src.Ingridients, opt => opt
-                    .MapFrom(x => x.ProductIngredients.Select(x => x.Ingredient)));
+              .ForMember(src => src.ProductImages, opt => opt
+               .MapFrom(x => x.ProductImages.OrderBy(p => p.Priority)))
+              .ForMember(src => src.Ingridients, opt => opt
+               .MapFrom(x => x.ProductIngredients.Select(x => x.Ingredient)));
+            CreateMap<ProductCreateModel, ProductEntity>()
+               .ForMember(x => x.ProductImages, opt => opt.Ignore())
+               .ForMember(x => x.ProductIngredients, opt => opt.Ignore());
 
 
 
