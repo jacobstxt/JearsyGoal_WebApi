@@ -51,7 +51,7 @@ namespace Core.Services
             var entity = mapper.Map<ProductEntity>(model);
             context.Products.Add(entity);
             await context.SaveChangesAsync();
-            foreach (var ingId in model.ProductIngredientsId!)
+            foreach (var ingId in model.IngredientIds!)
             {
                 var productIngredient = new ProductIngredientEntity
                 {
@@ -84,10 +84,21 @@ namespace Core.Services
             return entity;
         }
 
+        public async Task<IEnumerable<ProductIngridientModel>> GetIngredientsAsync()
+        {
+            var ingredients = await context.Ingredients
+                .ProjectTo<ProductIngridientModel>(mapper.ConfigurationProvider)
+                .ToListAsync();
+            return ingredients;
+        }
 
-
-
-
+        public async Task<IEnumerable<ProductSizeModel>> GetSizesAsync()
+        {
+            var sizes = await context.ProductSizes
+                .ProjectTo<ProductSizeModel>(mapper.ConfigurationProvider)
+                .ToListAsync();
+            return sizes;
+        }
 
     }
 }
