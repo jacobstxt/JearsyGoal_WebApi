@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Models.Product;
+using Core.Models.Product.Ingredient;
 using Domain.Entitties;
 
 namespace Core.Interfaces
@@ -17,5 +18,7 @@ namespace Core.Interfaces
         Task<ProductItemModel> Edit(ProductEditModel model);
         public Task<IEnumerable<ProductIngridientModel>> GetIngredientsAsync();
         public Task<IEnumerable<ProductSizeModel>> GetSizesAsync();
+        Task<ProductIngridientModel> UploadIngredient(CreateIngredientModel model);
+        Task  Delete(long id);
     }
 }

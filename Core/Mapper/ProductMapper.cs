@@ -23,7 +23,12 @@ namespace Core.Mapper
                 .ForMember(x => x.ProductImages, opt => opt.Ignore())
                 .ForMember(x => x.ProductIngredients, opt => opt.Ignore());
 
-
+            CreateMap<ProductEditModel, ProductEntity>()
+                .ForMember(x => x.Category, opt => opt.Ignore())
+                .ForMember(x => x.ProductSize, opt => opt.Ignore())
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.ProductImages, opt => opt.Ignore())
+                .ForMember(x => x.ProductIngredients, opt => opt.Ignore());
 
             //CreateMap<ProductImageEntity, ProductImageModel>();
             //CreateMap<ProductEntity, ProductItemModel>()

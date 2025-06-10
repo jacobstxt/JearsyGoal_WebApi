@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Core.Interfaces;
 using Core.Models.Product;
+using Core.Models.Product.Ingredient;
 using Domain;
 using Domain.Entitties;
 using Domain.Entitties.Identity;
@@ -34,6 +35,7 @@ namespace Core.Services
         public async Task<List<ProductItemModel>> List()
         {
             var model = await context.Products
+                .Where(x => !x.IsDeleted)
                 .ProjectTo<ProductItemModel>(mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -98,41 +100,16 @@ namespace Core.Services
 
         public async Task<ProductItemModel> Edit(ProductEditModel model)
         {
-            var item = await context.Products
-             .Where(x => x.Id == model.Id)
-             .ProjectTo<ProductItemModel>(mapper.ConfigurationProvider)
-             .SingleOrDefaultAsync();
-
             var entity = await context.Products
-              .Include(x => x.ProductIngredients)
-              .SingleOrDefaultAsync(x => x.Id == model.Id);
+                .Where(x => x.Id == model.Id)
+                .SingleOrDefaultAsync();
 
-            if (item == null)
-                throw new Exception("Продукт не знайдено");
+            mapper.Map(model, entity);
 
-            entity.Name = model.Name;
-            entity.Slug = model.Slug;
-            entity.Price = model.Price;
-            entity.Weight = model.Weight;
-            entity.ProductSizeId = model.ProductSizeId;
-            var categoryExists = await context.Categories.AnyAsync(c => c.Id == model.CategoryId);
-            if (!categoryExists)
-                throw new Exception("Вказана категорія не існує");
-            else
-            {
-                entity.CategoryId = model.CategoryId;
-            }
-
-
-             entity.ProductIngredients.Clear();
-            foreach (var ingId in model.IngredientIds)
-            {
-                entity.ProductIngredients.Add(new ProductIngredientEntity
-                {
-                    IngredientId = ingId,
-                    ProductId = entity.Id
-                });
-            }
+            var item = await context.Products
+                .Where(x => x.Id == model.Id)
+                .ProjectTo<ProductItemModel>(mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
 
             //Якщо фото немає у списку, то видаляємо його
             var imgDelete = item.ProductImages
@@ -153,7 +130,7 @@ namespace Core.Services
             }
 
             short p = 0;
-            // Iterate through all images and save or update them
+            //Перебираємо усі фото і їх зберігаємо або оновляємо
             foreach (var imgFile in model.ImageFiles!)
             {
                 if (imgFile.ContentType == "old-image")
@@ -161,12 +138,10 @@ namespace Core.Services
                     var img = await context.ProductImages
                         .Where(x => x.Name == imgFile.FileName)
                         .SingleOrDefaultAsync();
-                    if (img != null)
-                    {
-                        img.Priority = p;
-                        context.SaveChanges();
-                    }
+                    img.Priority = p;
+                    context.SaveChanges();
                 }
+
                 else
                 {
                     try
@@ -186,16 +161,64 @@ namespace Core.Services
                 }
 
                 p++;
+
             }
+
+            var existingIngredients = context.ProductIngredients
+                .Where(pi => pi.ProductId == item.Id);
+
+            context.ProductIngredients.RemoveRange(existingIngredients);
+
+            if (model.IngredientIds != null)
+            {
+                foreach (var ingredientId in model.IngredientIds.Distinct())
+                {
+                    var newIngredient = new ProductIngredientEntity
+                    {
+                        ProductId = item.Id,
+                        IngredientId = ingredientId
+                    };
+                    context.ProductIngredients.Add(newIngredient);
+                }
+            }
+
 
             await context.SaveChangesAsync();
             return item;
         }
 
 
+        public async Task<ProductIngridientModel> UploadIngredient(CreateIngredientModel model)
+        {
+            var entity = mapper.Map<IngredientEntity>(model);
+            entity.Image = await imageService.SaveImageAsync(model.ImageFile!);
+            context.Ingredients.Add(entity);
+            await context.SaveChangesAsync();        
+            return mapper.Map<ProductIngridientModel>(entity);
+        }
 
-
-
+        public async Task Delete(long id)
+        {
+            var product = await context.Products.Where(x => x.Id == id)
+                //.Include(x => x.ProductIngredients)
+                //.Include(x => x.ProductImages)
+                .FirstOrDefaultAsync();
+            product!.IsDeleted = true;
+            //if (product!.ProductIngredients != null)
+            //{
+            //    context.ProductIngredients.RemoveRange(product.ProductIngredients);
+            //}
+            //if (product.ProductImages != null)
+            //{
+            //    foreach (var image in product.ProductImages)
+            //    {
+            //        await imageService.DeleteImageAsync(image.Name);
+            //    }
+            //    context.ProductImages.RemoveRange(product!.ProductImages);
+            //}
+            //context.Products.Remove(product);
+            await context.SaveChangesAsync();
+        }
 
     }
 }
