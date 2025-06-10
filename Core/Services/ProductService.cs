@@ -103,6 +103,37 @@ namespace Core.Services
              .ProjectTo<ProductItemModel>(mapper.ConfigurationProvider)
              .SingleOrDefaultAsync();
 
+            var entity = await context.Products
+              .Include(x => x.ProductIngredients)
+              .SingleOrDefaultAsync(x => x.Id == model.Id);
+
+            if (item == null)
+                throw new Exception("Продукт не знайдено");
+
+            entity.Name = model.Name;
+            entity.Slug = model.Slug;
+            entity.Price = model.Price;
+            entity.Weight = model.Weight;
+            entity.ProductSizeId = model.ProductSizeId;
+            var categoryExists = await context.Categories.AnyAsync(c => c.Id == model.CategoryId);
+            if (!categoryExists)
+                throw new Exception("Вказана категорія не існує");
+            else
+            {
+                entity.CategoryId = model.CategoryId;
+            }
+
+
+             entity.ProductIngredients.Clear();
+            foreach (var ingId in model.IngredientIds)
+            {
+                entity.ProductIngredients.Add(new ProductIngredientEntity
+                {
+                    IngredientId = ingId,
+                    ProductId = entity.Id
+                });
+            }
+
             //Якщо фото немає у списку, то видаляємо його
             var imgDelete = item.ProductImages
                 .Where(x => !model.ImageFiles!.Any(y => y.FileName == x.Name))
