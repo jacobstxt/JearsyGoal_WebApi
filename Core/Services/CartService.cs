@@ -5,10 +5,12 @@ using Domain.Entitties;
 
 namespace Core.Services
 {
-    public class CartService(AppDbJerseyGoalContext jerseyContext) : ICartService
+    public class CartService(AppDbJerseyGoalContext jerseyContext
+        ,IAuthService authService) : ICartService
     {
-        public async Task<long> CreateUpdate(CartCreateUpdateModel model, long userId)
+        public async Task CreateUpdate(CartCreateUpdateModel model)
         {
+            var userId = await authService.GetUserId();
             var entity = jerseyContext.Carts
                 .SingleOrDefault(c => c.ProductId == model.ProductId && c.UserId == userId);
             if (entity != null)
@@ -20,11 +22,11 @@ namespace Core.Services
                     ProductId = model.ProductId,
                     UserId = userId,
                     Quantity = model.Quantity
-                };        
+                };
+                jerseyContext.Carts.Add(entity);
             }
-            jerseyContext.Carts.Update(entity);
             await jerseyContext.SaveChangesAsync();
-            return entity.ProductId;
+            //return entity.ProductId;
         }
     }
 }

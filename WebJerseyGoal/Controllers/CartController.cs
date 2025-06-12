@@ -12,10 +12,9 @@ namespace WebJerseyGoal.Controllers
     public class CartController(ICartService cartService) : ControllerBase
     {
         [HttpPost]
-        public IActionResult CreateUpdate([FromBody] CartCreateUpdateModel model)
+        public async Task<IActionResult> CreateUpdate([FromBody] CartCreateUpdateModel model)
         {
-            var email = User.Claims.First().Value;
-
+            await cartService.CreateUpdate(model);
             return Ok();
         }
     }
