@@ -1,12 +1,15 @@
-﻿using Core.Interfaces;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Core.Interfaces;
 using Core.Models.Cart;
 using Domain;
 using Domain.Entitties;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Services
 {
     public class CartService(AppDbJerseyGoalContext jerseyContext
-        ,IAuthService authService) : ICartService
+        ,IAuthService authService, IMapper mapper) : ICartService
     {
         public async Task CreateUpdate(CartCreateUpdateModel model)
         {
@@ -27,6 +30,23 @@ namespace Core.Services
             }
             await jerseyContext.SaveChangesAsync();
             //return entity.ProductId;
+        }
+
+        public Task Delete(long productId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<CartItemModel>> GetCartItems()
+        {
+            var userId = await authService.GetUserId();
+
+            var items = await jerseyContext.Carts
+                .Where(x => x.UserId == userId)
+                .ProjectTo<CartItemModel>(mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return items;
         }
     }
 }

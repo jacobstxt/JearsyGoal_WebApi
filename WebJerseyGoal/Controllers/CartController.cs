@@ -17,5 +17,12 @@ namespace WebJerseyGoal.Controllers
             await cartService.CreateUpdate(model);
             return Ok();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetItems()
+        {
+            var model = await cartService.GetCartItems();
+            return Ok(model);
+        }
     }
 }

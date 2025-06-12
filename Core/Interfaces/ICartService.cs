@@ -6,5 +6,6 @@ namespace Core.Interfaces
     {
         Task CreateUpdate(CartCreateUpdateModel model);
         Task Delete(long productId);
+        Task<List<CartItemModel>> GetCartItems();
     }
 }
