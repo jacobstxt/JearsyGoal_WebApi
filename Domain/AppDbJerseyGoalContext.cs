@@ -17,6 +17,7 @@ namespace Domain
         public DbSet<ProductImageEntity> ProductImages { get; set; }
         public DbSet<CartEntity> Carts { get; set; }
         public DbSet<OrderStatusEntity> OrderStatus { get; set; }
+        public DbSet<OrderEntity> Orders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

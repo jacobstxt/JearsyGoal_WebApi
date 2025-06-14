@@ -13,5 +13,6 @@ namespace Domain.Entitties
     {
         [StringLength(250)]
         public string Name { get; set; } = string.Empty;
+        public ICollection<OrderEntity> Orders { get; set; }
     }
 }
