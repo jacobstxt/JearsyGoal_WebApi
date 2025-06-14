@@ -24,5 +24,13 @@ namespace WebJerseyGoal.Controllers
             var model = await cartService.GetCartItems();
             return Ok(model);
         }
+
+        [HttpDelete("{productId}")]
+        public async Task<IActionResult> Delete(long productId)
+        {
+            await cartService.Delete(productId);
+            return Ok();
+        }
+
     }
 }

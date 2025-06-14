@@ -32,9 +32,16 @@ namespace Core.Services
             //return entity.ProductId;
         }
 
-        public Task Delete(long productId)
+        public async Task Delete(long productId)
         {
-            throw new NotImplementedException();
+            var userId = await authService.GetUserId();
+            var item = await jerseyContext.Carts
+                .SingleOrDefaultAsync(x => x.UserId == userId && x.ProductId == productId);
+            if (item != null)
+            {
+                jerseyContext.Carts.Remove(item);
+                await jerseyContext.SaveChangesAsync();
+            }
         }
 
         public async Task<List<CartItemModel>> GetCartItems()
@@ -48,5 +55,6 @@ namespace Core.Services
 
             return items;
         }
+
     }
 }
