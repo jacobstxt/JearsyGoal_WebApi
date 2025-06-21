@@ -57,9 +57,9 @@ namespace WebJerseyGoal.Controllers
 
 
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(long id)
         {
-            var category = await categoryService.Delete(id);
+            await categoryService.Delete(id);
             return Ok();
         }
 

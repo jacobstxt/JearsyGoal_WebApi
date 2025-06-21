@@ -13,7 +13,7 @@ namespace Core.Interfaces
         Task<CategoryItemViewModel?> GetItemById(int id);
         Task<CategoryItemViewModel> Create(CategoryCreateViewModel model);
         Task<CategoryItemViewModel> Edit(CategoryEditViewModel model);
-        Task<CategoryItemViewModel?> Delete(int id);
+        Task Delete(long id);
 
     }
 }

@@ -35,6 +35,14 @@ namespace Core.Services
             return mapper.Map<CategoryItemViewModel>(category);
         }
 
+        public async Task Delete(long id)
+        {
+            var entity = await jerseyContext.Categories.Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
+            entity!.IsDeleted = true;
+            await jerseyContext.SaveChangesAsync();
+        }
+
         public async Task<CategoryItemViewModel> Edit(CategoryEditViewModel model)
         {
             var existing = await jerseyContext.Categories.FirstOrDefaultAsync(x => x.Id == model.Id);
@@ -61,7 +69,7 @@ namespace Core.Services
 
         public async Task<List<CategoryItemViewModel>> List()
         {
-            var model = await mapper.ProjectTo<CategoryItemViewModel>(jerseyContext.Categories)
+            var model = await mapper.ProjectTo<CategoryItemViewModel>(jerseyContext.Categories.Where(x=> !x.IsDeleted))
              .ToListAsync();
             return model;
         }
