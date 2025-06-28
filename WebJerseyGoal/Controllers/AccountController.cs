@@ -82,11 +82,5 @@ namespace WebJerseyGoal.Controllers
             });
         }
 
-
-
-
-
-
-
     }
 }
