@@ -18,6 +18,10 @@ namespace Core.Mapper
                  .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Surname))
                  .ForMember(x => x.Image, opt =>opt.Ignore())
                  .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email));
+
+           CreateMap<GoogleAccountModel, UserEntity>()
+                 .ForMember(x => x.Image, opt => opt.Ignore())
+                 .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email));
         }
 
     }
