@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Models.Account;
 
 namespace Core.Interfaces
 {
     public interface IAccountService
     {
         public Task<string> LoginByGoogle(string token);
+        Task<List<UserItemModel>> List();
     }
 }

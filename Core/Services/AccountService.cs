@@ -3,8 +3,11 @@ using System.Text.Json;
 using AutoMapper;
 using Core.Interfaces;
 using Core.Models.Account;
+using Core.Models.Category;
+using Domain;
 using Domain.Entitties.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Core.Services
@@ -14,9 +17,17 @@ namespace Core.Services
         UserManager<UserEntity> userManager,
         IMapper mapper,
         IImageService imageService,
-        IConfiguration configuration
+        IConfiguration configuration,
+        AppDbJerseyGoalContext jerseyContext
         ) : IAccountService
     {
+
+
+        public async Task<List<UserItemModel>> List()
+        {
+            var model = await mapper.ProjectTo<UserItemModel>(jerseyContext.Users).ToListAsync();
+            return model;
+        }
 
 
         public async Task<string> LoginByGoogle(string token)

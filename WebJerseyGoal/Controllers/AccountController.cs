@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using Core.Interfaces;
+using Core.Models.Account;
+using Core.Services;
+using Domain.Entitties.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebJerseyGoal.Constants;
-using Domain.Entitties.Identity;
-using Core.Interfaces;
-using Core.Models.Account;
 
 namespace WebJerseyGoal.Controllers
 {
@@ -99,6 +100,12 @@ namespace WebJerseyGoal.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> List()
+        {
+            var model = await accountService.List();
+            return Ok(model);
+        }
 
     }
 }
