@@ -69,6 +69,9 @@ builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ISMTPService, SMTPService>();
+builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
+
 
 builder.Services.AddHttpContextAccessor();
 

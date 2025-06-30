@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
-using MailKit;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebJerseyGoal.Constants;
 using Domain.Entitties.Identity;
 using Core.Interfaces;
 using Core.Models.Account;
-using Core.Services;
 
 namespace WebJerseyGoal.Controllers
 {
@@ -19,7 +15,8 @@ namespace WebJerseyGoal.Controllers
         UserManager<UserEntity> userManager,
         IMapper mapper,
         IImageService imageService,
-        IAccountService accountService
+        IAccountService accountService,
+        IResetPasswordService resetPasswordService
         ) : ControllerBase
     {
 
@@ -62,7 +59,6 @@ namespace WebJerseyGoal.Controllers
             }
         }
 
-
         [HttpPost]
         public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequestModel model)
         {
@@ -81,6 +77,28 @@ namespace WebJerseyGoal.Controllers
                 Token = result
             });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordModel model)
+        {
+            var user = await userManager.FindByEmailAsync(model.Email);
+
+            await resetPasswordService.ForgotPassword(model);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await resetPasswordService.ResetPassword(model);
+
+            return Ok();
+        }
+
 
     }
 }
