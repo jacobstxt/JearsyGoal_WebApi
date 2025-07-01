@@ -26,6 +26,24 @@ namespace Core.Services
         public async Task<List<UserItemModel>> List()
         {
             var model = await mapper.ProjectTo<UserItemModel>(jerseyContext.Users).ToListAsync();
+            await jerseyContext.UserLogins.ForEachAsync(login =>
+            {
+                var user = model.FirstOrDefault(u => u.Id == login.UserId);
+                if (user != null)
+                {
+                    user.LoginTypes.Add(login.LoginProvider);
+                }
+            });
+
+            await jerseyContext.Users.ForEachAsync(dbUser =>
+            {
+                var user = model.FirstOrDefault(u => u.Id == dbUser.Id);
+                if (user != null && !string.IsNullOrEmpty(dbUser.PasswordHash))
+                {
+                    user.LoginTypes.Add("Password");
+                }
+            });
+
             return model;
         }
 
