@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Interfaces;
 using Core.Models.Account;
+using Core.Models.Search.Params;
 using Core.Services;
 using Domain.Entitties.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -100,12 +101,6 @@ namespace WebJerseyGoal.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> List()
-        {
-            var model = await accountService.List();
-            return Ok(model);
-        }
-
+   
     }
 }

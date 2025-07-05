@@ -1,9 +1,12 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Core.Interfaces;
 using Core.Models.Account;
 using Core.Models.Category;
+using Core.Models.Search;
+using Core.Models.Search.Params;
 using Domain;
 using Domain.Entitties.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -21,31 +24,6 @@ namespace Core.Services
         AppDbJerseyGoalContext jerseyContext
         ) : IAccountService
     {
-
-
-        public async Task<List<UserItemModel>> List()
-        {
-            var model = await mapper.ProjectTo<UserItemModel>(jerseyContext.Users).ToListAsync();
-            await jerseyContext.UserLogins.ForEachAsync(login =>
-            {
-                var user = model.FirstOrDefault(u => u.Id == login.UserId);
-                if (user != null)
-                {
-                    user.LoginTypes.Add(login.LoginProvider);
-                }
-            });
-
-            await jerseyContext.Users.ForEachAsync(dbUser =>
-            {
-                var user = model.FirstOrDefault(u => u.Id == dbUser.Id);
-                if (user != null && !string.IsNullOrEmpty(dbUser.PasswordHash))
-                {
-                    user.LoginTypes.Add("Password");
-                }
-            });
-
-            return model;
-        }
 
 
         public async Task<string> LoginByGoogle(string token)
@@ -105,5 +83,8 @@ namespace Core.Services
 
             return string.Empty;
         }
-    }
+
+       
+
+        }
 }
