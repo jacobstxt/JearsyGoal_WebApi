@@ -1,7 +1,6 @@
-﻿namespace Core.Interfaces
+﻿namespace Core.Interfaces;
+
+public interface IAuthService
 {
-    public interface IAuthService
-    {
-        Task<long> GetUserId();
-    }
+    Task<long> GetUserId();
 }

@@ -1,16 +1,32 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+namespace Core.Models.Account;
 
-namespace Core.Models.Account
+public class RegisterModel
 {
-    public class RegisterModel
-    {
-        public string Name { get; set; } = null!;
-        public string Surname { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public string Password { get; set; } = null!;
-        public string ConfirmPassword { get; set; } = null!;
-        public string? AvatarUrlPreview { get; set; } = string.Empty;
-        public IFormFile? Avatar { get; set; }
-    }
+    /// <summary>
+    /// Ім'я користувача
+    /// </summary>
+    /// <example>name</example>
+    public string FirstName { get; set; } = String.Empty;
+
+    /// <summary>
+    /// Прізвище користувача
+    /// </summary>
+    /// <example>surname</example>
+    public string LastName { get; set; } = String.Empty;
+
+    /// <summary>
+    /// Електронна пошта користувача
+    /// </summary>
+    /// <example>admin@example.com</example>
+    public string Email { get; set; } = String.Empty;
+
+    /// <summary>
+    /// Пароль пошта користувача
+    /// </summary>
+    /// <example>pass123?</example>
+    public string Password { get; set; } = String.Empty;
+    public IFormFile? ImageFile { get; set; } = null;
 }
+
+

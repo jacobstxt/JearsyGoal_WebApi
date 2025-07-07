@@ -1,7 +1,6 @@
-﻿namespace Core.Models.Seeder
+﻿namespace Core.Models.Seeder;
+
+public class SeederProductSizeModel
 {
-    public class SeederProductSizeModel
-    {
-        public string Name { get; set; } = string.Empty;
-    }
+    public string Name { get; set; } = String.Empty;
 }

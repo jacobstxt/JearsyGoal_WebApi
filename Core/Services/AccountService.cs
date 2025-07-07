@@ -1,90 +1,123 @@
 ﻿using System.Net.Http.Headers;
+using System.Net.Mail;
 using System.Text.Json;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Core.Interfaces;
 using Core.Models.Account;
-using Core.Models.Category;
-using Core.Models.Search;
-using Core.Models.Search.Params;
-using Domain;
-using Domain.Entitties.Identity;
+using Core.SMTP;
+using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Core.Services
+namespace Core.Services;
+
+public class AccountService(IJwtTokenService tokenService,
+    UserManager<UserEntity> userManager,
+    IMapper mapper,
+    IConfiguration configuration,
+    IImageService imageService,
+    ISmtpService smtpService
+    ) : IAccountService
 {
-    public class AccountService(
-        IJwtTokenService tokenService,
-        UserManager<UserEntity> userManager,
-        IMapper mapper,
-        IImageService imageService,
-        IConfiguration configuration,
-        AppDbJerseyGoalContext jerseyContext
-        ) : IAccountService
+
+    public async Task<string> LoginByGoogle(string token)
     {
+        using var httpClient = new HttpClient();
 
+        httpClient.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
 
-        public async Task<string> LoginByGoogle(string token)
+        //configuration
+        string userInfo = configuration["GoogleUserInfo"] ?? "https://www.googleapis.com/oauth2/v2/userinfo";
+        var response = await httpClient.GetAsync(userInfo);
+
+        if (!response.IsSuccessStatusCode)
+            return null;
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        var googleUser = JsonSerializer.Deserialize<GoogleAccountModel>(json);
+
+        var existingUser = await userManager.FindByEmailAsync(googleUser!.Email);
+        if (existingUser != null)
         {
-            using var httpClient = new HttpClient();
+            var userLoginGoogle = await userManager.FindByLoginAsync("Google", googleUser.GogoleId);
 
-            httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
-
-            //configuration
-            string userInfo = configuration["GoogleUserInfo"] ?? "https://www.googleapis.com/oauth2/v2/userinfo";
-            var response = await httpClient.GetAsync(userInfo);
-
-            if (!response.IsSuccessStatusCode)
-                return null;
-
-            var json = await response.Content.ReadAsStringAsync();
-
-            var googleUser = JsonSerializer.Deserialize<GoogleAccountModel>(json);
-
-            var existingUser = await userManager.FindByEmailAsync(googleUser!.Email);
-            if (existingUser != null)
+            if (userLoginGoogle == null)
             {
-                var userLoginGoogle = await userManager.FindByLoginAsync("Google", googleUser.GoogleId);
+                await userManager.AddLoginAsync(existingUser, new UserLoginInfo("Google", googleUser.GogoleId, "Google"));
+            }
+            var jwtToken = await tokenService.CreateTokenAsync(existingUser);
+            return jwtToken;
+        }
+        else
+        {
+            var user = mapper.Map<UserEntity>(googleUser);
 
-                if (userLoginGoogle == null)
-                {
-                    await userManager.AddLoginAsync(existingUser, new UserLoginInfo("Google", googleUser.GoogleId, "Google"));
-                }
-                var jwtToken = await tokenService.CreateTokenAsync(existingUser);
+            if (!String.IsNullOrEmpty(googleUser.Picture))
+            {
+                user.Image = await imageService.SaveImageFromUrlAsync(googleUser.Picture);
+            }
+
+            var result = await userManager.CreateAsync(user);
+            if (result.Succeeded)
+            {
+
+                result = await userManager.AddLoginAsync(user, new UserLoginInfo(
+                    loginProvider: "Google",
+                    providerKey: googleUser.GogoleId,
+                    displayName: "Google"
+                ));
+
+                await userManager.AddToRoleAsync(user, "User");
+                var jwtToken = await tokenService.CreateTokenAsync(user);
                 return jwtToken;
             }
-            else
-            {
-                var user = mapper.Map<UserEntity>(googleUser);
-
-                if (!String.IsNullOrEmpty(googleUser.Picture))
-                {
-                    user.Image = await imageService.SaveImageFromUrlAsync(googleUser.Picture);
-                }
-
-                var result = await userManager.CreateAsync(user);
-                if (result.Succeeded)
-                {
-
-                    result = await userManager.AddLoginAsync(user, new UserLoginInfo(
-                        loginProvider: "Google",
-                        providerKey: googleUser.GoogleId,
-                        displayName: "Google"
-                    ));
-
-                    await userManager.AddToRoleAsync(user, "User");
-                    var jwtToken = await tokenService.CreateTokenAsync(user);
-                    return jwtToken;
-                }
-            }
-
-            return string.Empty;
         }
 
-       
+        return string.Empty;
+    }
+    public async Task<bool> ForgotPasswordAsync(ForgotPasswordModel model)
+    {
+        var user = await userManager.FindByEmailAsync(model.Email);
 
+        if (user == null)
+        {
+            return false;
         }
+
+        string token = await userManager.GeneratePasswordResetTokenAsync(user);
+        var resetLink = $"{configuration["ClientUrl"]}/reset-password?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(model.Email)}";
+
+        var emailModel = new EmailMessage
+        {
+            To = model.Email,
+            Subject = "Password Reset",
+            Body = $"<p>Click the link below to reset your password:</p><a href='{resetLink}'>Reset Password</a>"
+        };
+
+        var result = await smtpService.SendEmailAsync(emailModel);
+
+        return result;
+    }
+
+    public async Task<bool> ValidateResetTokenAsync(ValidateResetTokenModel model)
+    {
+        var user = await userManager.FindByEmailAsync(model.Email);
+
+        return await userManager.VerifyUserTokenAsync(
+            user,
+            TokenOptions.DefaultProvider,
+            "ResetPassword",
+            model.Token);
+    }
+
+    public async Task ResetPasswordAsync(ResetPasswordModel model)
+    {
+        var user = await userManager.FindByEmailAsync(model.Email);
+
+        if (user != null)
+            await userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+    }
+
 }

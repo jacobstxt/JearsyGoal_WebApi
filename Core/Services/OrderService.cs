@@ -1,34 +1,30 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Core.Interfaces;
 using Core.Models.Order;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Services
+public class OrderService(IAuthService authService, AppDbPizushiContext context, IMapper mapper) : IOrderService
 {
-    public class OrderService(IAuthService authService, AppDbJerseyGoalContext context, IMapper mapper) : IOrderService
+    public async Task<List<OrderModel>> GetOrdersAsync()
     {
-        public async Task<List<OrderModel>> GetOrdersAsync()
+        var userId = await authService.GetUserId();
+
+        var orderModelList = await context.Orders
+            .Where(x => x.UserId == userId)
+            .ProjectTo<OrderModel>(mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        orderModelList = orderModelList
+        .Select(item =>
         {
-            var userId = await authService.GetUserId();
+            item.TotalPrice = item.OrderItems.Sum(oi => oi.PriceBuy * oi.Count);
+            return item;
+        })
+        .ToList();
 
-            var orderModelList = await context.Orders
-                .Where(x => x.UserId == userId)
-                .ProjectTo<OrderModel>(mapper.ConfigurationProvider)
-                .ToListAsync();
-
-            orderModelList = orderModelList
-            .Select(item =>
-            {
-                item.TotalPrice = item.OrderItems.Sum(oi => oi.PriceBuy * oi.Count);
-                return item;
-            })
-            .ToList();
-
-            return orderModelList;
-        }
-
+        return orderModelList;
     }
+
 }

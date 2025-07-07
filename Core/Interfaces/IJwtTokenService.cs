@@ -1,9 +1,8 @@
-﻿using Domain.Entitties.Identity;
+﻿using Domain.Entities.Identity;
 
-namespace Core.Interfaces
+namespace Core.Interfaces;
+
+public interface IJwtTokenService
 {
-    public interface IJwtTokenService
-    {
-        Task<string> CreateTokenAsync(UserEntity user);
-    }
+    Task<string> CreateTokenAsync(UserEntity user);
 }

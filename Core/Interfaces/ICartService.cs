@@ -1,11 +1,10 @@
 ﻿using Core.Models.Cart;
 
-namespace Core.Interfaces
+namespace Core.Interfaces;
+
+public interface ICartService
 {
-    public interface ICartService
-    {
-        Task CreateUpdate(CartCreateUpdateModel model);
-        Task Delete(long productId);
-        Task<List<CartItemModel>> GetCartItems();
-    }
+    Task CreateUpdate(CartCreateUpdateModel model);
+    Task<List<CartItemModel>> GetCartItems();
+    Task Delete(long id);
 }

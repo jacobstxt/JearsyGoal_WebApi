@@ -1,60 +1,59 @@
-﻿using AutoMapper;
+﻿
+using System.Diagnostics.Eventing.Reader;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Core.Interfaces;
 using Core.Models.Cart;
 using Domain;
-using Domain.Entitties;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Services
+namespace Core.Services;
+
+public class CartService(AppDbPizushiContext pizushiContext, 
+    IAuthService authService, IMapper mapper) : ICartService
 {
-    public class CartService(AppDbJerseyGoalContext jerseyContext
-        ,IAuthService authService, IMapper mapper) : ICartService
+    public async Task CreateUpdate(CartCreateUpdateModel model)
     {
-        public async Task CreateUpdate(CartCreateUpdateModel model)
+        var userId = await authService.GetUserId();
+        var entity = pizushiContext.Carts
+            .SingleOrDefault(x => x.UserId == userId && x.ProductId == model.ProductId);
+        if (entity != null)
+            entity.Quantity = model.Quantity;
+        else
         {
-            var userId = await authService.GetUserId();
-            var entity = jerseyContext.Carts
-                .SingleOrDefault(c => c.ProductId == model.ProductId && c.UserId == userId);
-            if (entity != null)
-                entity.Quantity = model.Quantity;
-            else
+            entity = new CartEntity
             {
-                entity = new CartEntity
-                {
-                    ProductId = model.ProductId,
-                    UserId = userId,
-                    Quantity = model.Quantity
-                };
-                jerseyContext.Carts.Add(entity);
-            }
-            await jerseyContext.SaveChangesAsync();
-            //return entity.ProductId;
+                UserId = userId,
+                ProductId = model.ProductId,
+                Quantity = model.Quantity
+            };
+            pizushiContext.Carts.Add(entity);
         }
+        await pizushiContext.SaveChangesAsync();
+    }
 
-        public async Task Delete(long productId)
+    public async Task<List<CartItemModel>> GetCartItems()
+    {
+        var userId = await authService.GetUserId();
+
+        var items = await pizushiContext.Carts
+            .Where(x => x.UserId == userId)
+            .ProjectTo<CartItemModel>(mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        return items;
+    }
+
+    public async Task Delete(long id)
+    {
+        var userId = await authService.GetUserId();
+        var item = await pizushiContext.Carts
+            .SingleOrDefaultAsync(x => x.UserId == userId && x.ProductId == id);
+        if (item != null)
         {
-            var userId = await authService.GetUserId();
-            var item = await jerseyContext.Carts
-                .SingleOrDefaultAsync(x => x.UserId == userId && x.ProductId == productId);
-            if (item != null)
-            {
-                jerseyContext.Carts.Remove(item);
-                await jerseyContext.SaveChangesAsync();
-            }
+            pizushiContext.Carts.Remove(item);
+            await pizushiContext.SaveChangesAsync();
         }
-
-        public async Task<List<CartItemModel>> GetCartItems()
-        {
-            var userId = await authService.GetUserId();
-
-            var items = await jerseyContext.Carts
-                .Where(x => x.UserId == userId)
-                .ProjectTo<CartItemModel>(mapper.ConfigurationProvider)
-                .ToListAsync();
-
-            return items;
-        }
-
     }
 }

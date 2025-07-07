@@ -1,12 +1,13 @@
-﻿using Core.Models.Account;
+﻿using Core.Models.AdminUser;
 using Core.Models.Search;
 using Core.Models.Search.Params;
+using Core.Models.Seeder;
 
-namespace Core.Interfaces
+namespace Core.Interfaces;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        Task<List<UserItemModel>> List();
-        Task<SearchResult<UserItemModel>> SearchUsersAsync(UserSearchModel model);
-    }
+    Task<List<AdminUserItemModel>> GetAllUsersAsync();
+    Task<SearchResult<AdminUserItemModel>> SearchUsersAsync(UserSearchModel model);
+    Task<string> SeedAsync(SeedItemsModel model);
 }

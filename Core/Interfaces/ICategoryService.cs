@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core.Models.Category;
+﻿using Core.Models.Category;
 
-namespace Core.Interfaces
+namespace Core.Interfaces;
+
+public interface ICategoryService
 {
-    public interface ICategoryService
-    {
-        Task<List<CategoryItemViewModel>> List();
-        Task<CategoryItemViewModel?> GetItemById(int id);
-        Task<CategoryItemViewModel> Create(CategoryCreateViewModel model);
-        Task<CategoryItemViewModel> Edit(CategoryEditViewModel model);
-        Task Delete(long id);
-
-    }
+    Task<List<CategoryItemModel>> List();
+    Task<CategoryItemModel?> GetItemById(int id);
+    Task<CategoryItemModel> Create(CategoryCreateModel model);
+    Task<CategoryItemModel> Update(CategoryEditModel model);
+    Task Delete(long id);
 }

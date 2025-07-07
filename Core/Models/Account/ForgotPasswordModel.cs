@@ -1,7 +1,6 @@
-﻿namespace Core.Models.Account
+﻿namespace Core.Models.Account;
+
+public class ForgotPasswordModel
 {
-    public class ForgotPasswordModel
-    {
-        public string Email { get; set; } = string.Empty;
-    }
+    public string Email { get; set; } = string.Empty;
 }

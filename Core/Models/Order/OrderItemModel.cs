@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Core.Models.Order;
 
-namespace Core.Models.Order
+public class OrderItemModel
 {
-    public class OrderItemModel
-    {
-        public decimal PriceBuy { get; set; }
-        public int Count { get; set; }
-        public long ProductId { get; set; }
-        public string ProductSlug { get; set; } = string.Empty;
-        public string ProductName { get; set; } = string.Empty;
-        public string ProductImage { get; set; } = string.Empty;
-    }
+    public decimal PriceBuy { get; set; }
+    public int Count { get; set; }
+    public long ProductId { get; set; }
+    public string ProductSlug { get; set; } = string.Empty;
+    public string ProductName { get; set; } = string.Empty;
+    public string ProductImage { get; set; } = string.Empty;
 }

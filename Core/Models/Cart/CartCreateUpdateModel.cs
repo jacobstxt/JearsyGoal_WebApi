@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Core.Models.Cart;
 
-namespace Core.Models.Cart
+public class CartCreateUpdateModel
 {
-    public class CartCreateUpdateModel
-    {
-        public long ProductId { get; set; }
-        public int Quantity { get; set; } = 1;
-    }
+    public long ProductId { get; set; }
+    public int Quantity { get; set; } = 1;
 }

@@ -1,11 +1,11 @@
 ﻿using Core.Models.Account;
-using Core.Models.Search;
-using Core.Models.Search.Params;
 
-namespace Core.Interfaces
+namespace Core.Interfaces;
+
+public interface IAccountService
 {
-    public interface IAccountService
-    {
-        public Task<string> LoginByGoogle(string token);
-    }
+    public Task<string> LoginByGoogle(string token);
+    public Task<bool> ForgotPasswordAsync(ForgotPasswordModel model);
+    public Task<bool> ValidateResetTokenAsync(ValidateResetTokenModel model);
+    public Task ResetPasswordAsync(ResetPasswordModel model);
 }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using Domain.Entitties.Identity;
+using Domain.Entities.Identity;
 using Core.Models.Account;
 
 namespace Core.Validators.Account;

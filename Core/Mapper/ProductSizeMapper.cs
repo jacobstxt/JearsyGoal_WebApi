@@ -1,19 +1,15 @@
 ﻿using AutoMapper;
-using Core.Models.Category;
-using Core.Models.Product;
+using Domain.Entities;
 using Core.Models.Seeder;
-using Domain.Entitties;
+using Core.Models.Product;
 
-namespace Core.Mapper
+namespace Core.Mapper;
+
+public class ProductSizeMapper : Profile
 {
-    public class ProductSizeMapper:Profile
+    public ProductSizeMapper()
     {
-        public ProductSizeMapper()
-        {
-            CreateMap<SeederProductSizeModel, ProductSizeEntity>();
-            CreateMap<ProductSizeEntity, ProductSizeModel>();
-        } 
-
-
+        CreateMap<SeederProductSizeModel, ProductSizeEntity>();
+        CreateMap<ProductSizeEntity, ProductSizeModel>();
     }
 }

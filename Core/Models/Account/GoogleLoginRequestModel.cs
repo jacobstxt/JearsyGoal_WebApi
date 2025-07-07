@@ -1,8 +1,6 @@
-﻿
-namespace Core.Models.Account
+﻿namespace Core.Models.Account;
+
+public class GoogleLoginRequestModel
 {
-    public class GoogleLoginRequestModel
-    {
-        public string Token { get; set; } = string.Empty;
-    }
+    public string Token { get; set; } = string.Empty;
 }
