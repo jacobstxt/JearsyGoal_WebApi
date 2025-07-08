@@ -1,4 +1,5 @@
 ﻿using Core.Interfaces;
+using Core.Models.AdminUser;
 using Core.Models.Search.Params;
 using Core.Models.Seeder;
 using Microsoft.AspNetCore.Mvc;
@@ -42,4 +43,23 @@ public class UsersController(IUserService userService) : Controller
         var result = await userService.SeedAsync(model);
         return Ok(result);
     }
+
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateUsers([FromForm] AdminUserUpdateModel model)
+    {
+        var result = await userService.UpdateUsersAsync(model);
+        return Ok(result);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetItemById(int id)
+    {
+        var result = await userService.GetItemById(id);
+        if (result == null)
+        {
+            return NotFound();
+        }
+        return Ok(result);
+    }
+
 }

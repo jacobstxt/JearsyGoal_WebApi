@@ -1,9 +1,12 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using System.Text.Json;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Bogus;
 using Core.Constants;
 using Core.Interfaces;
 using Core.Models.AdminUser;
+using Core.Models.Category;
 using Core.Models.Search;
 using Core.Models.Search.Params;
 using Core.Models.Seeder;
@@ -12,8 +15,6 @@ using Domain.Entities.Identity;
 using MailKit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
-using System.Text.Json;
 using static Bogus.DataSets.Name;
 
 namespace Core.Services;
@@ -81,9 +82,9 @@ public class UserService(UserManager<UserEntity> userManager,
 
         if (model.Roles != null && model.Roles.Any())
         {
-            var roles = model.Roles.Where(x=>!string.IsNullOrEmpty(x));
-            if(roles.Count() > 0)
-                query = query.Where(user => roles.Any(role => user.UserRoles.Select(x=>x.Role.Name).Contains(role)));
+            var roles = model.Roles.Where(x => !string.IsNullOrEmpty(x));
+            if (roles.Count() > 0)
+                query = query.Where(user => roles.Any(role => user.UserRoles.Select(x => x.Role.Name).Contains(role)));
         }
 
         var totalCount = await query.CountAsync();
@@ -99,7 +100,7 @@ public class UserService(UserManager<UserEntity> userManager,
             .ProjectTo<AdminUserItemModel>(mapper.ConfigurationProvider)
             .ToListAsync();
 
-       //await LoadLoginsAndRolesAsync(users);
+        //await LoadLoginsAndRolesAsync(users);
 
         return new SearchResult<AdminUserItemModel>
         {
@@ -127,7 +128,7 @@ public class UserService(UserManager<UserEntity> userManager,
            .RuleFor(u => u.Password, (f, u) => f.Internet.Password(8))
            .RuleFor(u => u.Roles, f => new List<string>() { f.PickRandom(Constants.Roles.AllRoles) })
            .RuleFor(u => u.Image, f => "https://thispersondoesnotexist.com");
-            
+
         var genUsers = fakeUsers.Generate(model.Count);
 
         try
@@ -173,4 +174,91 @@ public class UserService(UserManager<UserEntity> userManager,
 
         return elapsedTime;
     }
+
+
+    public async Task<AdminUserItemModel> UpdateUsersAsync(AdminUserUpdateModel model)
+    {
+        var user = await userManager.FindByIdAsync(model.Id.ToString());
+        if (user == null)
+            throw new Exception("Користувача не знайдено");
+
+        // Оновлення даних
+        user.FirstName = model.FirstName;
+        user.LastName = model.LastName;
+        user.Email = model.Email;
+        user.UserName = model.Email; // важливо: Email == UserName у Identity
+        if (model.Image != null)
+        {
+            var imageName = await imageService.SaveImageAsync(model.Image);
+            user.Image = imageName;
+        }
+
+
+        var result = await userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+            throw new Exception(string.Join("; ", result.Errors.Select(e => e.Description)));
+
+        // Оновлення ролей
+        var currentRoles = await userManager.GetRolesAsync(user);
+        var rolesToRemove = currentRoles.Except(model.Roles);
+        var rolesToAdd = model.Roles.Except(currentRoles);
+
+        if (rolesToRemove.Any())
+            await userManager.RemoveFromRolesAsync(user, rolesToRemove);
+
+        if (rolesToAdd.Any())
+            await userManager.AddToRolesAsync(user, rolesToAdd);
+
+        // Отримання логінів (Google, Password)
+        var logins = await userManager.GetLoginsAsync(user);
+        var isGoogle = logins.Any(l => l.LoginProvider == "Google");
+        var isPassword = !string.IsNullOrEmpty(user.PasswordHash);
+
+        return new AdminUserItemModel
+        {
+            Id = user.Id,
+            FullName = $"{user.FirstName} {user.LastName}".Trim(),
+            Email = user.Email,
+            Image = user.Image,
+            Roles = (await userManager.GetRolesAsync(user)).ToList(),
+            IsLoginGoogle = isGoogle,
+            IsLoginPassword = isPassword,
+            LoginTypes = new List<string>()
+        {
+            isGoogle ? "Google" : null,
+            isPassword ? "Password" : null
+        }.Where(x => x != null).ToList()!
+        };
+    }
+
+
+    public async Task<AdminUserItemModel?> GetItemById(int id)
+    {
+        var userModel = await mapper
+            .ProjectTo<AdminUserItemModel>(context.Users.Where(x => x.Id == id))
+            .SingleOrDefaultAsync();
+
+        if (userModel == null)
+            return null;
+
+        var user = await userManager.FindByIdAsync(id.ToString());
+        if (user == null)
+            return null;
+
+        var roles = await userManager.GetRolesAsync(user);
+        var logins = await userManager.GetLoginsAsync(user);
+
+        userModel.Roles = roles.ToList();
+        userModel.LoginTypes = logins.Select(l => l.LoginProvider).ToList();
+
+        if (!string.IsNullOrEmpty(user.PasswordHash))
+            userModel.LoginTypes.Add("Password");
+
+        return userModel;
+    }
+
+
+
+
+
 }
