@@ -26,6 +26,7 @@ public class RegisterModel
     /// </summary>
     /// <example>pass123?</example>
     public string Password { get; set; } = String.Empty;
+    public string ConfirmPassword { get; set; } = String.Empty;
     public IFormFile? ImageFile { get; set; } = null;
 }
 

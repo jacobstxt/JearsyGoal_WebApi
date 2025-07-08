@@ -5,7 +5,7 @@ public static class EmailConfiguration
     /// <summary>
     /// Хто відправляє листа
     /// </summary>
-    public const string From = "super.novakvova@ukr.net";
+    public const string From = "jacobsmaksym@ukr.net";
     /// <summary>
     /// Адреса SMTP сервера
     /// </summary>
@@ -17,10 +17,10 @@ public static class EmailConfiguration
     /// <summary>
     /// Імя користувача для авторизації
     /// </summary>
-    public const string UserName = "super.novakvova@ukr.net";
+    public const string UserName = "jacobsmaksym@ukr.net";
     /// <summary>
     /// Пароль, який видав сервер
     /// </summary>
-    public const string Password = "0gFY4Q9P9s5H9iLd";
+    public const string Password = "oYmLaS4YVfOxVwAo";
 
 }

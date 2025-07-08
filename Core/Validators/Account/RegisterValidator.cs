@@ -36,5 +36,8 @@ public class RegisterValidator : AbstractValidator<RegisterModel>
                 .NotEmpty().WithMessage("Last name is required")
                 .MaximumLength(50).WithMessage("Last name cannot be longer than 50 characters");
 
+        RuleFor(x => x.ConfirmPassword)
+            .Equal(x => x.Password).WithMessage("Паролі не співпадають");
+
     }
 }

@@ -82,6 +82,8 @@ namespace WebApiPizushi.Controllers
             bool res = await accountService.ForgotPasswordAsync(model);
             if (res)
                 return Ok();
+
+
             else
                 return BadRequest(new
                 {
@@ -104,5 +106,6 @@ namespace WebApiPizushi.Controllers
             await accountService.ResetPasswordAsync(model);
             return Ok();
         }
+
     }
 }

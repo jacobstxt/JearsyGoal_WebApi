@@ -116,8 +116,10 @@ public class AccountService(IJwtTokenService tokenService,
     {
         var user = await userManager.FindByEmailAsync(model.Email);
 
+
+
         if (user != null)
-            await userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            await userManager.ResetPasswordAsync(user, model.Token, model.Password);
     }
 
 }
