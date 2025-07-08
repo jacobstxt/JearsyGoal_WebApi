@@ -132,15 +132,31 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseStaticFiles();
+
+//var dir = builder.Configuration["ImagesDir"];
+//string path = Path.Combine(Directory.GetCurrentDirectory(), dir);
+//Directory.CreateDirectory(path);
+
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(path),
+//    RequestPath = $"/{dir}"
+//});
+
+
 var dir = builder.Configuration["ImagesDir"];
 string path = Path.Combine(Directory.GetCurrentDirectory(), dir);
 Directory.CreateDirectory(path);
 
+app.UseStaticFiles(); // щоб обробляти файли з wwwroot
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(path),
-    RequestPath = $"/{dir}"
+    RequestPath = "/images"  // щоб URL був /images/файл
 });
+
 
 await app.SeedData();
 
