@@ -145,18 +145,15 @@ app.UseStaticFiles();
 //});
 
 
-var dir = builder.Configuration["ImagesDir"];
-var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", dir);
-Directory.CreateDirectory(path);
-
-app.UseStaticFiles(); // обробка звичайних статичних файлів
+var imagesDir = builder.Configuration["ImagesDir"]; // "images"
+var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), imagesDir);
+Directory.CreateDirectory(imagesPath);
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(path),
-    RequestPath = $"/{dir}"
+    FileProvider = new PhysicalFileProvider(imagesPath),
+    RequestPath = "/" + imagesDir
 });
-
 
 
 await app.SeedData();
