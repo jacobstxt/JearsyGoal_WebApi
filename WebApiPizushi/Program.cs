@@ -146,16 +146,17 @@ app.UseStaticFiles();
 
 
 var dir = builder.Configuration["ImagesDir"];
-string path = Path.Combine(Directory.GetCurrentDirectory(), dir);
+var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", dir);
 Directory.CreateDirectory(path);
 
-app.UseStaticFiles(); // щоб обробляти файли з wwwroot
+app.UseStaticFiles(); // обробка звичайних статичних файлів
 
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(path),
-    RequestPath = "/images"  // щоб URL був /images/файл
+    RequestPath = $"/{dir}"
 });
+
 
 
 await app.SeedData();
