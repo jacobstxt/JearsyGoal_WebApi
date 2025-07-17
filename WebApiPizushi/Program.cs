@@ -132,7 +132,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-//app.UseStaticFiles();
+app.UseStaticFiles();
 
 //var dir = builder.Configuration["ImagesDir"];
 //string path = Path.Combine(Directory.GetCurrentDirectory(), dir);
