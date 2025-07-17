@@ -155,6 +155,8 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/" + imagesDir
 });
 
+app.MapGet("/check-path", () => Directory.GetCurrentDirectory());
+
 
 await app.SeedData();
 
