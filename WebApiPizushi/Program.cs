@@ -145,22 +145,15 @@ app.MapControllers();
 //});
 
 
-var imagesDir = builder.Configuration["ImagesDir"]; // "images"
-var imagesPath = Path.Combine("/app", imagesDir);
-
-if (!Directory.Exists(imagesPath))
-{
-    Directory.CreateDirectory(imagesPath); // Створює навіть якщо вона порожня
-}
-
-app.UseStaticFiles();
+var dir = builder.Configuration["ImagesDir"];
+string path = Path.Combine(Directory.GetCurrentDirectory(), dir);
+Directory.CreateDirectory(path);
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(imagesPath),
-    RequestPath = "/" + imagesDir
+    FileProvider = new PhysicalFileProvider(path),
+    RequestPath = $"/{dir}"
 });
-
 
 
 await app.SeedData();
