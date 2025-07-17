@@ -147,6 +147,12 @@ app.MapControllers();
 
 var imagesDir = builder.Configuration["ImagesDir"]; // "images"
 var imagesPath = Path.Combine("/app", imagesDir);
+
+if (!Directory.Exists(imagesPath))
+{
+    Directory.CreateDirectory(imagesPath); // Створює навіть якщо вона порожня
+}
+
 app.UseStaticFiles();
 
 app.UseStaticFiles(new StaticFileOptions
