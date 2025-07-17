@@ -146,8 +146,8 @@ app.MapControllers();
 
 
 var imagesDir = builder.Configuration["ImagesDir"]; // "images"
-var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), imagesDir);
-Directory.CreateDirectory(imagesPath);
+var imagesPath = Path.Combine("/app", imagesDir);
+app.UseStaticFiles();
 
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -155,7 +155,6 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/" + imagesDir
 });
 
-app.MapGet("/check-path", () => Directory.GetCurrentDirectory());
 
 
 await app.SeedData();
