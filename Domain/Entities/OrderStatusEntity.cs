@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
-[Table("tblOrderStatuses")]
+[Table("tbl_OrderStatuses")]
 public class OrderStatusEntity : BaseEntity<long>
 {
     [StringLength(250)]

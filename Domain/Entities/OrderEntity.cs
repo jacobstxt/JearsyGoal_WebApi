@@ -4,7 +4,7 @@ using Domain.Entities.Identity;
 
 namespace Domain.Entities;
 
-[Table("tblOrders")]
+[Table("tbl_Orders")]
 public class OrderEntity : BaseEntity<long>
 {
     [ForeignKey(nameof(OrderStatus))]

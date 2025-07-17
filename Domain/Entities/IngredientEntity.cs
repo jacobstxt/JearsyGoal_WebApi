@@ -4,7 +4,7 @@ using Domain.Entities.Identity;
 
 namespace Domain.Entities;
 
-[Table("tblIngredients")]
+[Table("tbl_Ingredients")]
 public class IngredientEntity : BaseEntity<long>
 {
     [StringLength(250)]

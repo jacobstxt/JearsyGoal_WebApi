@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
-[Table("tblCategories")]
+[Table("tbl_Categories")]
 public class CategoryEntity : BaseEntity<long>
 {
     [StringLength(250)]

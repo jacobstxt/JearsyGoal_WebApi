@@ -1,13 +1,14 @@
 ﻿using System.Text.Json;
 using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Core.Constants;
-using Domain;
-using Domain.Entities;
-using Domain.Entities.Identity;
 using Core.Interfaces;
 using Core.Models.Seeder;
+using Domain;
+using Domain.Entities;
+using Domain.Entities.Delivery;
+using Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApiPizushi;
 
@@ -21,6 +22,8 @@ public static class DbSeeder
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<RoleEntity>>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserEntity>>();
         var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+        var novaPosta = scope.ServiceProvider.GetRequiredService<INovaPoshtaService>();
+
 
         context.Database.Migrate();
 
@@ -357,5 +360,25 @@ public static class DbSeeder
 
             await context.SaveChangesAsync();
         }
+
+
+        if (!context.PostDepartments.Any())
+        {
+            await novaPosta.FetchDepartmentsAsync();
+        }
+
+        if (!context.PaymentTypes.Any())
+        {
+            var list = new List<PaymentTypeEntity>
+            {
+                new PaymentTypeEntity { Name = "Готівка" },
+                new PaymentTypeEntity { Name = "Картка" }
+            };
+
+            await context.PaymentTypes.AddRangeAsync(list);
+            await context.SaveChangesAsync();
+        }
+
+
     }
 }

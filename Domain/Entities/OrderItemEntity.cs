@@ -2,6 +2,7 @@
 
 namespace Domain.Entities;
 
+[Table("tbl_OrderItems")]
 public class OrderItemEntity : BaseEntity<long>
 {
     public decimal PriceBuy { get; set; }

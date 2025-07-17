@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
-[Table("tblProductImages")]
+[Table("tbl_ProductImages")]
 public class ProductImageEntity : BaseEntity<long>
 {
     [StringLength(250)]

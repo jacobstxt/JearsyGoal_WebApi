@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Identity;
 
-[Table("tblProductIngredients")]
+[Table("tbl_ProductIngredients")]
 public class ProductIngredientEntity
 {
     [ForeignKey("Product")]

@@ -4,6 +4,7 @@ using Domain.Entities.Identity;
 
 namespace Domain.Entities;
 
+[Table("tbl_Carts")]
 public class CartEntity
 {
     [ForeignKey("Product")]

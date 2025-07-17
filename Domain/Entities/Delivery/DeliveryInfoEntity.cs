@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.Delivery
 {
-    [Table("tblDeliveryInfos")]
+    [Table("tbl_DeliveryInfos")]
     public class DeliveryInfoEntity
     {
         [Key]

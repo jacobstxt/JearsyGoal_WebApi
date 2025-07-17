@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
-[Table("tblProductSizes")]
+[Table("tbl_ProductSizes")]
 public class ProductSizeEntity : BaseEntity<long>
 {
     [StringLength(250)]

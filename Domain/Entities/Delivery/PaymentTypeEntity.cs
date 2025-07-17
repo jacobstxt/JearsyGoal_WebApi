@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.Delivery
 {
-    [Table("tblPaymentTypes")]
+    [Table("tbl_PaymentTypes")]
     public class PaymentTypeEntity: BaseEntity<long>
     {
         public string Name { get; set; } = string.Empty;
