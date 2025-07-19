@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
+using Core.Models.Delivery;
 using Core.Models.Order;
 using Domain.Entities;
+using Domain.Entities.Delivery;
 
 namespace Core.Mapper;
 
-public class OederMapper : Profile
+public class OrderMapper : Profile
 {
-    public OederMapper()
+    public OrderMapper()
     {
         CreateMap<OrderItemEntity, OrderItemModel>()
             .ForMember(x => x.ProductImage, opt => opt
@@ -16,5 +18,12 @@ public class OederMapper : Profile
 
         CreateMap<OrderEntity, OrderModel>()
             .ForMember(x => x.Status, opt => opt.MapFrom(x => x.OrderStatus!.Name));
+
+        CreateMap<CartEntity, OrderItemEntity>()
+          .ForMember(x => x.PriceBuy, opt => opt
+          .MapFrom(x => x.Product!.Price))
+          .ForMember(x => x.Count, opt => opt
+          .MapFrom(x => x.Quantity));
+        CreateMap<DeliveryInfoCreateModel, DeliveryInfoEntity>();
     }
 }
