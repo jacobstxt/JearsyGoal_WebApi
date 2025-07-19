@@ -66,7 +66,7 @@ public class OrderService(IAuthService authService, ISmtpService smtpService, Ap
                 <div style='font-family: Arial, sans-serif; color: #333;'>
                     <h2 style='color: #E60C24;'>Дякуємо за ваше замовлення, {model.RecipientName}!</h2>
                     <p>Ваше замовлення на суму <strong>{price:N2} грн</strong> було успішно оформлено.</p>
-                    <p>Незабаром його буде передано на доставку.</p>
+                    <p>Незабаром його буде передано в доставку.</p>
 
                     <h3 style='margin-top: 30px; color: #E60C24;'>Деталі замовлення:</h3>
                     <table style='width: 100%; border-collapse: collapse; margin-top: 10px;'>
